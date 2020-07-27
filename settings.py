@@ -1,7 +1,7 @@
 # SETTINGS FILE
 
 # Game window size
-WIDTH = 1024 
+WIDTH = 512
 HEIGHT = 512
 
 TILE_SIZE = 64

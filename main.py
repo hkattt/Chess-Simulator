@@ -1,7 +1,7 @@
 # MAIN GAME FILE
 
 # Importing required modules
-import pygame
+import pygame as pg
 import random
 import time
 
@@ -10,23 +10,24 @@ from settings import *
 from pieces import *
 from board import *
 
-pygame.init() 
-pygame.mixer.init()
+pg.init() 
+pg.mixer.init()
 
 class Game():
     def __init__(self): 
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT)) # Game window
-        pygame.display.set_caption("Chess") # Game windows caption
-        self.clock = pygame.time.Clock()
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT)) # Game window
+        pg.display.set_caption("Chess") # Game windows caption
+        self.clock = pg.time.Clock()
         self.running = True
+        self.colour_index = [WHITE, BLACK]
 
     def load_board(self):
         pass
 
     def new(self):
-        self.all_sprites = pygame.sprite.Group()
-        self.black_pieces = pygame.sprite.Group()
-        self.white_pieces = pygame.sprite.Group()
+        self.all_sprites = pg.sprite.Group()
+        self.black_pieces = pg.sprite.Group()
+        self.white_pieces = pg.sprite.Group()
         self.run()
 
     def run(self):
@@ -42,18 +43,33 @@ class Game():
         self.all_sprites.update()
 
     def events(self):
-        for event in pygame.event.get():
+        for event in pg.event.get():
             # Checks if the user wants to quit the game
-            if event.type == pygame.QUIT:
+            if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
                 self.running = False
 
-            if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+            if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
                         if self.playing:
                             self.playing = False
                         self.running = False
 
+    def board_colours(self):
+        index = 1
+        for column in range(8):
+            for row in range(8):
+                tile = pg.Rect(column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+                pg.draw.rect(self.screen, self.colour_index[index], tile)
+                index * -1
+            index * -1
+
     def paint(self):
-        pass
+        self.board_colours()
+        pg.display.update()
+
+
+game = Game()
+while game.running:
+    game.new()
