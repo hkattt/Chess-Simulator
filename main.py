@@ -57,18 +57,16 @@ class Game():
                         self.running = False
 
     def board_colours(self):
-        index = 1
+        index = 0
         for column in range(8):
             for row in range(8):
-                tile = pg.Rect(column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-                pg.draw.rect(self.screen, self.colour_index[index], tile)
-                index * -1
-            index * -1
+                pg.draw.rect(self.screen, self.colour_index[index], (column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
+                index = (index - 1) * -1
+            index = (index -1) * -1
 
     def paint(self):
         self.board_colours()
         pg.display.update()
-
 
 game = Game()
 while game.running:
