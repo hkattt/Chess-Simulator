@@ -1,6 +1,6 @@
 # SETTINGS FILE
 
-# Game window size
+# game window size
 WIDTH = 512
 HEIGHT = 512
 
@@ -8,7 +8,7 @@ TILE_SIZE = 64
 GRID_WIDTH = WIDTH / TILE_SIZE
 GRID_HEIGHT = HEIGHT / TILE_SIZE
 
-# Colours and FPS
+# colours and FPS
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
