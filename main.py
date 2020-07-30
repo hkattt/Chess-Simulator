@@ -7,7 +7,9 @@ import time
 
 # imports other game files
 from pieces import *
+from player import *
 from board import *
+
 
 pg.init() 
 pg.mixer.init()
@@ -17,10 +19,15 @@ class Game():
         self.screen = pg.display.set_mode((WIDTH, HEIGHT)) # game window
         pg.display.set_caption("Chess") # game windows title
         self.clock = pg.time.Clock() # controls FPS
-        self.running = True
+        self.running = True 
+        self.board = board # board containing the position of each piece
 
     def new(self):
         """ Creates a new game """
+        # creates players
+        self.white = Player("W", self)
+        self.black = Player("B", self)
+
         # creates sprite groups
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
@@ -28,7 +35,7 @@ class Game():
 
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
-        for row, tiles in enumerate(board):
+        for row, tiles in enumerate(self.board):
             for column, tile in enumerate(tiles):
                 # creates object based on each tiles string (string corresponding to each tile)
                 if tile != ".":
@@ -55,6 +62,9 @@ class Game():
                 self.events()
                 self.update()
                 self.paint()
+                if self.white.turn:
+                    self.white.move()
+
 
     def update(self):
         """ Updates window """
