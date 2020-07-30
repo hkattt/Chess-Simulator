@@ -20,14 +20,28 @@ class Game():
         self.clock = pg.time.Clock() # controls FPS
         self.running = True
 
-    def load_board(self):
-        pass
-
     def new(self):
         """ Creates a new game """
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
         self.white_pieces = pg.sprite.Group()
+
+        for row, tiles in enumerate(board):
+            for column, tile in enumerate(tiles):
+                # creates object based on the list items (string)
+                if tile != ".":
+                    if tile == "K":
+                        King(row * TILE_SIZE, column * TILE_SIZE, "B")
+                    elif tile == "Q":
+                        Queen(row * TILE_SIZE, column * TILE_SIZE, "B")
+                    elif tile == "R":
+                        Rook(row * TILE_SIZE, column * TILE_SIZE, "B")
+                    elif tile == "B":
+                        Bishop(row * TILE_SIZE, column * TILE_SIZE, "B")
+                    elif tile == "Kn":
+                        Knight(row * TILE_SIZE, column * TILE_SIZE, "B")
+                    elif tile == "P":
+                        Pawn(row * TILE_SIZE, column * TILE_SIZE, "B")
         self.run()
 
     def run(self):
