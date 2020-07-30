@@ -6,7 +6,6 @@ import random
 import time
 
 # imports other game files
-from settings import *
 from pieces import *
 from board import *
 
@@ -31,17 +30,17 @@ class Game():
                 # creates object based on the list items (string)
                 if tile != ".":
                     if tile == "K":
-                        King(row * TILE_SIZE, column * TILE_SIZE, "B")
+                        King(column * TILE_SIZE, row * TILE_SIZE, self)
                     elif tile == "Q":
-                        Queen(row * TILE_SIZE, column * TILE_SIZE, "B")
+                        Queen(column * TILE_SIZE, row * TILE_SIZE, self)
                     elif tile == "R":
-                        Rook(row * TILE_SIZE, column * TILE_SIZE, "B")
+                        Rook(column * TILE_SIZE, row * TILE_SIZE, self)
                     elif tile == "B":
-                        Bishop(row * TILE_SIZE, column * TILE_SIZE, "B")
+                        Bishop(column * TILE_SIZE, row * TILE_SIZE, self)
                     elif tile == "Kn":
-                        Knight(row * TILE_SIZE, column * TILE_SIZE, "B")
+                        Knight(column * TILE_SIZE, row * TILE_SIZE, self)
                     elif tile == "P":
-                        Pawn(row * TILE_SIZE, column * TILE_SIZE, "B")
+                        Pawn(column * TILE_SIZE, row * TILE_SIZE, self)
         self.run()
 
     def run(self):
@@ -77,7 +76,7 @@ class Game():
     def board_colours(self):
         """ Draws the board tiles """
         index = 0 
-        colour_index = [WHITE, BLACK] 
+        colour_index = [WHITE, LIGHT_GREY] 
         # iterates over every tile on the chess board
         for column in range(8):
             for row in range(8):
@@ -89,6 +88,8 @@ class Game():
     def paint(self):
         """ Draws onto the window """
         self.board_colours()
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, sprite)
         pg.display.update() # updates the window
 
 game = Game()
