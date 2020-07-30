@@ -63,8 +63,8 @@ class Game():
                 self.update()
                 self.paint()
                 if self.white.turn:
+                    print("hi")
                     self.white.move()
-
 
     def update(self):
         """ Updates window """
