@@ -21,13 +21,16 @@ class Game():
 
     def new(self):
         """ Creates a new game """
+        # creates sprite groups
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
         self.white_pieces = pg.sprite.Group()
 
+        # iterates over the board array
+        # the board array holds the starting positions of all the pieces
         for row, tiles in enumerate(board):
             for column, tile in enumerate(tiles):
-                # creates object based on the list items (string)
+                # creates object based on each tiles string (string corresponding to each tile)
                 if tile != ".":
                     if tile == "K":
                         King(column * TILE_SIZE, row * TILE_SIZE, self)

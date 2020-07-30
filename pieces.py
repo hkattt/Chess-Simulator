@@ -10,8 +10,10 @@ class Piece(pg.sprite.Sprite):
     def __init__(self, x, y, game):
         self.x = x
         self.y = y
+        # copy of the game class, allowing the pieces to access information about 
+        # other pieces on the board
         self.game = game
-        # determines where the piece is positioned on the board
+        # calculates which side of the board the piece is on (B or W)
         # using this the colour of the piece can be determined
         if self.y > TILE_SIZE * 2:
             self.colour = "W"
@@ -29,10 +31,13 @@ class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = self.x, self.y
+        # positions the piece in the centre of the tile
+        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
 
     def load_image(self):
+        """ Loads in the sprite image for the king piece """
         if self.colour == "B":
             self.image = pg.image.load("blackKing.png")
         else:
@@ -42,12 +47,13 @@ class Queen(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
-
     
     def load_image(self):
+        """ Loads in the sprite image for the queen piece """
         if self.colour == "B":
             self.image = pg.image.load("blackQueen.png")
         else:
@@ -57,11 +63,13 @@ class Rook(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
 
     def load_image(self):
+        """ Loads in the sprite image for the rook piece """
         if self.colour == "B":
             self.image = pg.image.load("blackRook.png")
         else:
@@ -71,11 +79,13 @@ class Bishop(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
     
     def load_image(self):
+        """ Loads in the sprite image for the bishop piece """
         if self.colour == "B":
             self.image = pg.image.load("blackBishop.png")
         else:
@@ -85,11 +95,13 @@ class Knight(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
     
     def load_image(self):
+        """ Loads in the sprite image for the knight piece """
         if self.colour == "B":
             self.image = pg.image.load("blackKnight.png")
         else:
@@ -99,12 +111,14 @@ class Pawn(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
 
 
     def load_image(self):
+        """ Loads in the sprite image for the pawn piece """
         if self.colour == "B":
             self.image = pg.image.load("blackPawn.png")
         else:
