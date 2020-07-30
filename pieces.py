@@ -30,6 +30,8 @@ class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # scales the image to the desired size
+        self.image = pg.transform.scale(self.image, (64, 64))
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
@@ -45,6 +47,8 @@ class Queen(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # scales the image to the desired size
+        self.image = pg.transform.scale(self.image, (64, 64))
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
@@ -60,6 +64,8 @@ class Rook(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # scales the image to the desired size
+        self.image = pg.transform.scale(self.image, (64, 64))
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
@@ -75,6 +81,8 @@ class Bishop(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # scales the image to the desired size
+        self.image = pg.transform.scale(self.image, (64, 64))
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
@@ -90,6 +98,8 @@ class Knight(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # scales the image to the desired size
+        self.image = pg.transform.scale(self.image, (64, 64))
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
@@ -105,6 +115,8 @@ class Pawn(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
         self.load_image()
+        # scales the image to the desired size
+        self.image = pg.transform.scale(self.image, (64, 64))
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
