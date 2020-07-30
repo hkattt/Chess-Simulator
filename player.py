@@ -32,8 +32,8 @@ class Player():
         if self.colour == "W":
             for piece in self.game.white_pieces:
                 if piece.x <= mousePos[0] and piece.x + TILE_SIZE >= mousePos[0]:
-                    if piece.y <= mousePos[0] and piece.y + TILE_SIZE >= mousePos[0]:
-                        print("yay")
+                    if piece.y <= mousePos[1] and piece.y + TILE_SIZE >= mousePos[1]:
+                        print(piece)
 
 
 
