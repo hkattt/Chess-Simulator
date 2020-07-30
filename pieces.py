@@ -26,7 +26,6 @@ class Piece(pg.sprite.Sprite):
             self.groups = game.all_sprites, game.white_pieces
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
-
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -42,7 +41,6 @@ class King(Piece):
             self.image = pg.image.load("blackKing.png")
         else:
             self.image = pg.image.load("whiteKing.png")
-
 class Queen(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -58,7 +56,6 @@ class Queen(Piece):
             self.image = pg.image.load("blackQueen.png")
         else:
             self.image = pg.image.load("whiteQueen.png")
-
 class Rook(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -74,7 +71,6 @@ class Rook(Piece):
             self.image = pg.image.load("blackRook.png")
         else:
             self.image = pg.image.load("whiteRook.png")
-
 class Bishop(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -90,7 +86,6 @@ class Bishop(Piece):
             self.image = pg.image.load("blackBishop.png")
         else:
             self.image = pg.image.load("whiteBishop.png")
-
 class Knight(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -106,7 +101,6 @@ class Knight(Piece):
             self.image = pg.image.load("blackKnight.png")
         else:
             self.image = pg.image.load("whiteKnight.png")
-
 class Pawn(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -115,7 +109,6 @@ class Pawn(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
-
 
     def load_image(self):
         """ Loads in the sprite image for the pawn piece """
