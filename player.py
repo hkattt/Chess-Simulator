@@ -15,25 +15,63 @@ class Player():
         else:
             self.turn = False
         self.mousedown = False
-        self.mousereleased = True
+        self.previous = False
 
     def move(self):
-        position = pg.mouse.get_pos()
-        pressed = pg.mouse.get_pressed()
+        """ Player moves their pieces using the mouse """
+        position = pg.mouse.get_pos() # position of the mouse cursor
+        # returns a tuple of bool values (corresponding to each mouse button)
+        # the first value [0] is the left mouse button
+        pressed = pg.mouse.get_pressed() 
 
+        # mouse button is pressed
         if pressed[0]:
             self.mousedown = True
-            self.mouse_over(position)
+            # checks if a piece was clicked
+            self.clicked(position) 
+        # mouse button is not pressed
         else:
             self.mousedown = False
-            self.mousereleased = True
 
-    def mouse_over(self, mousePos):
+        # moves the selected piece
+        for piece in self.game.all_sprites:
+            if piece.clicked:
+                piece.rect.center = position
+
+        # checks for state change (i.e. when the button is released)
+        if self.mouse_up(self.mousedown):
+            for piece in self.game.all_sprites:
+                # drops the piece - player has moved
+                piece.clicked = False
+                self.turn = False
+
+    def clicked(self, mousePos):
+        """ Determines which piece got clicked """
+        # the user can only pick up (click) their pieces (B or W)
         if self.colour == "W":
             for piece in self.game.white_pieces:
-                if piece.x <= mousePos[0] and piece.x + TILE_SIZE >= mousePos[0]:
-                    if piece.y <= mousePos[1] and piece.y + TILE_SIZE >= mousePos[1]:
-                        print(piece)
+                # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
+                if piece.rect.collidepoint(mousePos):
+                    piece.clicked = True
+        
+        else:
+            for piece in self.game.black_pieces:
+                # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
+                if piece.rect.collidepoint(mousePos):
+                    piece.clicked = True
+
+    def mouse_up(self, current):
+        """ Looks for a statechange in the mouse press """
+        # if the previous state is not the same as the current state
+        # a state change has occurred.
+        if self.previous != current:
+            self.previous = current # update the previous state to be the current state
+            # only returns true when the button has been released
+            if current == False: 
+                return True
+        return False
+
+        
 
 
 
