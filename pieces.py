@@ -27,7 +27,7 @@ class Piece(pg.sprite.Sprite):
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
         # used to determine whether a piece has been picked up
-        self.clicked = False
+
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)

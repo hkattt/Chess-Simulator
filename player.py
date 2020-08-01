@@ -2,6 +2,7 @@
 
 # importing required modules
 import pygame as pg
+import math
 
 # importing required files
 from settings import *
@@ -16,6 +17,7 @@ class Player():
             self.turn = False
         self.mousedown = False
         self.previous = False
+        self.selected_piece= None
 
     def move(self):
         """ Player moves their pieces using the mouse """
@@ -34,16 +36,14 @@ class Player():
             self.mousedown = False
 
         # moves the selected piece
-        for piece in self.game.all_sprites:
-            if piece.clicked:
-                piece.rect.center = position
+        if self.selected_piece != None:
+            self.selected_piece.rect.center = position
 
         # checks for state change (i.e. when the button is released)
         if self.mouse_up(self.mousedown):
-            for piece in self.game.all_sprites:
-                # drops the piece - player has moved
-                piece.clicked = False
-                self.turn = False
+            self.snap_to_grid()
+            self.selected_piece = None
+            self.turn = False
 
     def clicked(self, mousePos):
         """ Determines which piece got clicked """
@@ -52,13 +52,13 @@ class Player():
             for piece in self.game.white_pieces:
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
-                    piece.clicked = True
+                    self.selected_piece = piece
         
         else:
             for piece in self.game.black_pieces:
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
-                    piece.clicked = True
+                    self.selected_piece = piece
 
     def mouse_up(self, current):
         """ Looks for a statechange in the mouse press """
@@ -70,6 +70,18 @@ class Player():
             if current == False: 
                 return True
         return False
+
+    def snap_to_grid(self):
+        smallest = float('inf')
+        for column in range(8):
+            for row in range(8):
+                tile_x, tile_y = (column * TILE_SIZE) + (TILE_SIZE / 2), (row * TILE_SIZE) + (TILE_SIZE / 2)
+                dist = math.sqrt(math.pow(self.selected_piece.rect.center[0] - tile_x, 2) + math.pow(self.selected_piece.rect.center[1] - tile_y, 2))
+                if dist < smallest:
+                    smallest = dist
+                    x, y = column, row
+
+        self.selected_piece.rect.center = (x * TILE_SIZE) + (TILE_SIZE / 2), (y * TILE_SIZE) + (TILE_SIZE / 2)
 
         
 
