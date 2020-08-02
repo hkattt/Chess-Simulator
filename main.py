@@ -40,17 +40,17 @@ class Game():
                 # creates object based on each tiles string (string corresponding to each tile)
                 if tile != ".":
                     if tile == "K":
-                        King(column * TILE_SIZE, row * TILE_SIZE, self)
+                        King(column, row, self)
                     elif tile == "Q":
-                        Queen(column * TILE_SIZE, row * TILE_SIZE, self)
+                        Queen(column, row, self)
                     elif tile == "R":
-                        Rook(column * TILE_SIZE, row * TILE_SIZE, self)
+                        Rook(column, row, self)
                     elif tile == "B":
-                        Bishop(column * TILE_SIZE, row * TILE_SIZE, self)
+                        Bishop(column, row, self)
                     elif tile == "Kn":
-                        Knight(column * TILE_SIZE, row * TILE_SIZE, self)
+                        Knight(column, row, self)
                     elif tile == "P":
-                        Pawn(column * TILE_SIZE, row * TILE_SIZE, self)
+                        Pawn(column, row, self)
         self.run()
 
     def run(self):

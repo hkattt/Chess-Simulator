@@ -10,12 +10,13 @@ class Piece(pg.sprite.Sprite):
     def __init__(self, x, y, game):
         self.x = x
         self.y = y
+        print(x, y)
         # copy of the game class, allowing the pieces to access information about 
         # other pieces on the board
         self.game = game
         # calculates which side of the board the piece is on (B or W)
         # using this the colour of the piece can be determined
-        if self.y > TILE_SIZE * 2:
+        if (self.y * TILE_SIZE) > TILE_SIZE * 2:
             self.colour = "W"
         else:
             self.colour = "B"
@@ -37,7 +38,7 @@ class King(Piece):
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
-        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
+        self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def load_image(self):
         """ Loads in the sprite image for the king piece """
@@ -54,7 +55,7 @@ class Queen(Piece):
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
-        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
+        self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
     
     def load_image(self):
         """ Loads in the sprite image for the queen piece """
@@ -71,7 +72,7 @@ class Rook(Piece):
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
-        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
+        self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def load_image(self):
         """ Loads in the sprite image for the rook piece """
@@ -88,7 +89,7 @@ class Bishop(Piece):
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
-        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
+        self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
     
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
@@ -105,7 +106,7 @@ class Knight(Piece):
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
-        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
+        self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
     
     def load_image(self):
         """ Loads in the sprite image for the knight piece """
@@ -122,7 +123,7 @@ class Pawn(Piece):
         # an images rect is used to draw the image onto the game window
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
-        self.rect.center = (self.x + (TILE_SIZE / 2), self.y + (TILE_SIZE / 2))
+        self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def load_image(self):
         """ Loads in the sprite image for the pawn piece """
