@@ -10,7 +10,6 @@ class Piece(pg.sprite.Sprite):
     def __init__(self, x, y, game):
         self.x = x
         self.y = y
-        print(x, y)
         # copy of the game class, allowing the pieces to access information about 
         # other pieces on the board
         self.game = game
@@ -28,7 +27,6 @@ class Piece(pg.sprite.Sprite):
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
         # used to determine whether a piece has been picked up
-
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
