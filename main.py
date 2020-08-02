@@ -64,6 +64,8 @@ class Game():
                 self.paint()
                 if self.white.turn:
                     self.white.move()
+                elif self.black.turn:
+                    self.black.move()
 
     def update(self):
         """ Updates window """

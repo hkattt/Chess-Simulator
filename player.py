@@ -40,10 +40,16 @@ class Player():
             self.selected_piece.rect.center = position
 
         # checks for state change (i.e. when the button is released)
-        if self.mouse_up(self.mousedown):
-            self.snap_to_grid()
-            self.selected_piece = None
+        # does not do anything if the user did not click on a piece (i.e. clicked the board)
+        if self.mouse_up(self.mousedown) and self.selected_piece != None:
+            self.snap_to_grid() 
+            self.selected_piece = None # drops the piece
+            # after the move it is the other players turn
             self.turn = False
+            if self.colour == "W":
+                self.game.black.turn = True
+            else:
+                self.game.white.turn = True
 
     def clicked(self, mousePos):
         """ Determines which piece got clicked """
