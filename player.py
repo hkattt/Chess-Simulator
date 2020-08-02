@@ -72,16 +72,21 @@ class Player():
         return False
 
     def snap_to_grid(self):
-        smallest = float('inf')
+        """ Positions a newly moved piece in the centre of its tile """
+        smallest = float('inf') # place holder (used to find the closest tile)
+        # iterates over each tile
         for column in range(8):
             for row in range(8):
+                # calculates the x, y coordinates of the centre the current tile
                 tile_x, tile_y = (column * TILE_SIZE) + (TILE_SIZE / 2), (row * TILE_SIZE) + (TILE_SIZE / 2)
+                # calculates the distance between the piece being moved and the current tile
                 dist = math.sqrt(math.pow(self.selected_piece.rect.center[0] - tile_x, 2) + math.pow(self.selected_piece.rect.center[1] - tile_y, 2))
+                # if the distance is smaller than the current smallest (or closest) the current distance is the smallest
                 if dist < smallest:
                     smallest = dist
-                    x, y = column, row
-
-        self.selected_piece.rect.center = (x * TILE_SIZE) + (TILE_SIZE / 2), (y * TILE_SIZE) + (TILE_SIZE / 2)
+                    x, y = tile_x, tile_y
+        # updates the pieces position to the centre of the closest tile
+        self.selected_piece.rect.center = (x, y)
 
         
 

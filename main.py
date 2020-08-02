@@ -94,7 +94,6 @@ class Game():
             for row in range(8):
                 # draws a new tile in each position, changing the colour each time
                 pg.draw.rect(self.screen, colour_index[index], (column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
-                pg.draw.circle(self.screen, RED, (column * TILE_SIZE, row * TILE_SIZE), 5)
                 index = (index - 1) * -1 # flips the colour
             index = (index -1) * -1 # ensures each row starts with a different colour
 
