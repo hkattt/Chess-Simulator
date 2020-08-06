@@ -100,8 +100,20 @@ class Game():
     def paint(self):
         """ Draws onto the window """
         self.board_colours()
+        print(self.white.selected_piece)
+        if self.white.selected_piece != None:
+            print(self.white.selected_piece.viable)
+            for move in self.white.selected_piece.viable:
+                print(move)
+
+        if self.black.selected_piece != None:
+            for move in self.black.selected_piece.viable:
+                print(move)
+                pg.draw.rect(self.screen, GREEN, (move[0], move[1], 64, 64), 0)
+
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, sprite)
+
         pg.display.update() # updates the window
 
 game = Game()
