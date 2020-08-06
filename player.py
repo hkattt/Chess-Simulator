@@ -17,7 +17,7 @@ class Player():
             self.turn = False
         self.mousedown = False
         self.previous = False
-        self.selected_piece= None
+        self.selected_piece = None
 
     def move(self):
         """ Player moves their pieces using the mouse """
@@ -28,9 +28,11 @@ class Player():
 
         # mouse button is pressed
         if pressed[0]:
-            self.mousedown = True
-            # checks if a piece was clicked
-            self.clicked(position) 
+            # checks if the player is already carrying a piece
+            if self.selected_piece == None: 
+                self.mousedown = True
+                # checks if a piece was clicked
+                self.clicked(position) 
         # mouse button is not pressed
         else:
             self.mousedown = False
@@ -43,9 +45,10 @@ class Player():
         # does not do anything if the user did not click on a piece (i.e. clicked the board)
         if self.mouse_up(self.mousedown) and self.selected_piece != None:
             self.snap_to_grid() 
-            self.selected_piece = None # drops the piece
             # after the move it is the other players turn
             self.turn = False
+            # player is not carrying a piece
+            self.selected_piece = None
             if self.colour == "W":
                 self.game.black.turn = True
             else:

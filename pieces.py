@@ -26,7 +26,13 @@ class Piece(pg.sprite.Sprite):
             self.groups = game.all_sprites, game.white_pieces
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
-        # used to determine whether a piece has been picked up
+
+    def tiles_occupied(self):
+        occupied = []
+        for piece in self.game.all_sprites:
+            occupied.append((piece.x, piece.y))
+        return occupied
+
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -71,6 +77,18 @@ class Rook(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        print(self.x, self.y, self.move_list())
+
+
+    def move_list(self):
+        viable = [] # stores all the viable moves
+        occupied = self.tiles_occupied()
+        for column in range(8):
+            for row in range(8):
+                if column == self.x or row == self.y:
+                    if (column, row) not in occupied:
+                        viable.append((column, row))
+        return viable
 
     def load_image(self):
         """ Loads in the sprite image for the rook piece """

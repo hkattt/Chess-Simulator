@@ -10,10 +10,8 @@ from pieces import *
 from player import *
 from board import *
 
-
 pg.init() 
 pg.mixer.init()
-
 class Game():
     def __init__(self): 
         self.screen = pg.display.set_mode((WIDTH, HEIGHT)) # game window
