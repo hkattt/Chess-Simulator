@@ -29,9 +29,13 @@ class Piece(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
 
     def tiles_occupied(self):
-        occupied = []
-        for piece in self.game.all_sprites:
-            occupied.append((piece.x, piece.y))
+        occupied = [] # list containing all the occupied squares
+        if self.colour == "W": # white piece
+            for piece in self.game.white_pieces:
+                occupied.append((piece.x, piece.y))
+        else: # black piece
+            for piece in self.game.black_pieces:
+                occupied.append((piece.x, piece.y))
         return occupied
 class King(Piece):
     def __init__(self, x, y, game):

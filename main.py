@@ -89,12 +89,13 @@ class Game():
     def board_colours(self):
         """ Draws the board tiles """
         index = 0 
-        colour_index = [WHITE, LIGHT_GREY] 
+        colour_index = [WHITE, LIGHT_BROWN] 
         # iterates over every tile on the chess board
         for column in range(8):
             for row in range(8):
                 # draws a new tile in each position, changing the colour each time
-                pg.draw.rect(self.screen, colour_index[index], (column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
+                pg.draw.rect(self.screen, BLACK, (column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
+                pg.draw.rect(self.screen, colour_index[index], (column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
                 index = (index - 1) * -1 # flips the colour
             index = (index -1) * -1 # ensures each row starts with a different colour
 
@@ -105,8 +106,9 @@ class Game():
             if team.turn: # checks which teams turn it is
                 if team.selected_piece != None: # checks if the player is carrying a piece
                     # draws all the viable moves (i.e. draws circles onto the board)
-                    for move in team.selected_piece.viable: 
-                        pg.draw.circle(self.screen, GREEN, (int((move[0] * TILE_SIZE) + (TILE_SIZE / 2)), int((move[1] * TILE_SIZE) + (TILE_SIZE / 2))), int((TILE_SIZE / 6)))
+                    for move in team.selected_piece.viable:
+                        pg.draw.rect(self.screen, BLACK, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
+                        pg.draw.rect(self.screen, DARK_GREY, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
 
     def paint(self):
         """ Draws onto the window """
