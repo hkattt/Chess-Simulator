@@ -68,6 +68,7 @@ class Player():
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
                     self.selected_piece = piece
+        self.selected_piece.move_list()
 
     def mouse_up(self, current):
         """ Looks for a statechange in the mouse press """

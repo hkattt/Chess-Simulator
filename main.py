@@ -25,6 +25,7 @@ class Game():
         # creates players
         self.white = Player("W", self)
         self.black = Player("B", self)
+        self.teams = [self.white, self.black]
 
         # creates sprite groups
         self.all_sprites = pg.sprite.Group()
@@ -97,19 +98,20 @@ class Game():
                 index = (index - 1) * -1 # flips the colour
             index = (index -1) * -1 # ensures each row starts with a different colour
 
+    def viable_colours(self):
+        """ Draws the viable tiles onto the board """
+        # iterates over both of the teams (W & B)
+        for team in self.teams:
+            if team.turn: # checks which teams turn it is
+                if team.selected_piece != None: # checks if the player is carrying a piece
+                    # draws all the viable moves (i.e. draws circles onto the board)
+                    for move in team.selected_piece.viable: 
+                        pg.draw.circle(self.screen, GREEN, (int((move[0] * TILE_SIZE) + (TILE_SIZE / 2)), int((move[1] * TILE_SIZE) + (TILE_SIZE / 2))), int((TILE_SIZE / 6)))
+
     def paint(self):
         """ Draws onto the window """
         self.board_colours()
-        print(self.white.selected_piece)
-        if self.white.selected_piece != None:
-            print(self.white.selected_piece.viable)
-            for move in self.white.selected_piece.viable:
-                print(move)
-
-        if self.black.selected_piece != None:
-            for move in self.black.selected_piece.viable:
-                print(move)
-                pg.draw.rect(self.screen, GREEN, (move[0], move[1], 64, 64), 0)
+        self.viable_colours()
 
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, sprite)
