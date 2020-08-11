@@ -138,9 +138,12 @@ class Knight(Piece):
         """ Generates a list containing all of the knights viable moves """
         self.viable = []
         occupied = self.tiles_occupied()
+        # adds potential moves
         self.viable += [(self.x + 1, self.y + 2), (self.x + 2, self.y + 1), (self.x + 2, self.y - 1), (self.x + 1, self.y - 2),
                          (self.x - 1, self.y - 2), (self.x - 2, self.y - 1), (self.x - 2, self.y + 1), (self.x - 1, self.y + 2)]
+        # removes moves that have an occupied tile
         self.viable[:] = [move for move in self.viable if move not in occupied]
+        # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 
 
