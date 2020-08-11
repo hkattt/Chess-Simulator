@@ -37,6 +37,7 @@ class Piece(pg.sprite.Sprite):
             for piece in self.game.black_pieces:
                 occupied.append((piece.x, piece.y))
         return occupied
+
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -54,6 +55,7 @@ class King(Piece):
             self.image = pg.image.load("blackKing.png")
         else:
             self.image = pg.image.load("whiteKing.png")
+
 class Queen(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -83,6 +85,7 @@ class Rook(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def move_list(self):
+        """ Generates a list containing all of the rooks viable moves """
         self.viable = []
         occupied = self.tiles_occupied()
         for column in range(8):
@@ -108,6 +111,11 @@ class Bishop(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+
+    def move_list(self):
+        """ Generates a list containing all of the bishops viable moves """
+        self.viable = []
+        occupied = self.tiles_occupied()
     
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
@@ -125,7 +133,17 @@ class Knight(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
-    
+
+    def move_list(self):
+        """ Generates a list containing all of the knights viable moves """
+        self.viable = []
+        occupied = self.tiles_occupied()
+        self.viable += [(self.x + 1, self.y + 2), (self.x + 2, self.y + 1), (self.x + 2, self.y - 1), (self.x + 1, self.y - 2),
+                         (self.x - 1, self.y - 2), (self.x - 2, self.y - 1), (self.x - 2, self.y + 1), (self.x - 1, self.y + 2)]
+        self.viable[:] = [move for move in self.viable if move not in occupied]
+        self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+
+
     def load_image(self):
         """ Loads in the sprite image for the knight piece """
         if self.colour == "B":
