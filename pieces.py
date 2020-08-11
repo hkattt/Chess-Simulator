@@ -37,7 +37,6 @@ class Piece(pg.sprite.Sprite):
             for piece in self.game.black_pieces:
                 occupied.append((piece.x, piece.y))
         return occupied
-
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -67,7 +66,6 @@ class King(Piece):
             self.image = pg.image.load("blackKing.png")
         else:
             self.image = pg.image.load("whiteKing.png")
-
 class Queen(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -136,7 +134,6 @@ class Rook(Piece):
             self.image = pg.image.load("blackRook.png")
         else:
             self.image = pg.image.load("whiteRook.png")
-
 class Bishop(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)

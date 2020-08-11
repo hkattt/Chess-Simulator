@@ -98,11 +98,4 @@ class Player():
         # updates the pieces position to the centre of the closest tile
         self.selected_piece.rect.center = (x, y)
         # board coordinates
-        self.selected_piece.x, self.selected_piece.y = (x - (TILE_SIZE / 2)) / TILE_SIZE, (y - (TILE_SIZE / 2)) / TILE_SIZE        
-
-
-
-
-
-
-    
+        self.selected_piece.x, self.selected_piece.y = (x - (TILE_SIZE / 2)) / TILE_SIZE, (y - (TILE_SIZE / 2)) / TILE_SIZE
