@@ -49,6 +49,18 @@ class King(Piece):
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
+    def move_list(self):
+        self.viable = []
+        occupied = self.tiles_occupied()
+        # generates potential moves
+        self.viable += [(self.x + 1, self.y), (self.x, self.y + 1), (self.x - 1, self.y), (self.x, self.y - 1), 
+            (self.x + 1, self.y + 1), (self.x - 1, self.y - 1), (self.x + 1, self.y - 1), (self.x - 1, self.y + 1)]
+        # removes moves that have an occupied tile
+        self.viable[:] = [move for move in self.viable if move not in occupied]
+        # removes moves that are off the board
+        self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+        print(self.viable)
+
     def load_image(self):
         """ Loads in the sprite image for the king piece """
         if self.colour == "B":
@@ -101,6 +113,7 @@ class Rook(Piece):
             self.image = pg.image.load("blackRook.png")
         else:
             self.image = pg.image.load("whiteRook.png")
+
 class Bishop(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -146,7 +159,6 @@ class Knight(Piece):
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 
-
     def load_image(self):
         """ Loads in the sprite image for the knight piece """
         if self.colour == "B":
@@ -163,6 +175,48 @@ class Pawn(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        self.first = True
+
+    def move_list(self):
+        self.viable = []
+        occupied = self.tiles_occupied()
+        # white pawn
+        if self.colour == "W":
+            # first move (pawns can jump two tiles)
+            if self.first:
+                self.viable += [(self.x, self.y - 2)]
+                self.first = False
+
+            # checks if the pawn can take any black pieces
+            for piece in self.game.black_pieces:
+                # top right
+                if piece.x == self.x + 1 and piece.y == self.y - 1:
+                    self.viable += [(piece.x, piece.y)]
+                # top left
+                elif piece.x == self.x - 1 and piece.y == self.y - 1:
+                    self.viable += [(piece.x, piece.y)]
+            self.viable += [(self.x, self.y - 1)]
+
+        # black pawn
+        else:
+            # first move (pawns can jump two tiles)
+            if self.first:
+                self.viable += [(self.x, self.y + 2)]
+                self.first = False
+
+            # checks if the pawn can take any black pieces
+            for piece in self.game.white_pieces:
+                # bottom right
+                if piece.x == self.x + 1 and piece.y == self.y + 1:
+                    self.viable += [(piece.x, piece.y)]
+                # bottom left
+                elif piece.x == self.x - 1 and piece.y == self.y + 1:
+                    self.viable += [(piece.x, piece.y)]
+            self.viable += [(self.x, self.y + 1)]
+        # removes moves that have an occupied tile
+        self.viable[:] = [move for move in self.viable if move not in occupied]
+        # removes moves that are off the board
+        self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 
     def load_image(self):
         """ Loads in the sprite image for the pawn piece """
