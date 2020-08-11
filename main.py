@@ -87,7 +87,9 @@ class Game():
                     self.running = False
 
     def board_colours(self):
-        """ Draws the board tiles """
+        """ Draws the board tiles. 
+            This function uses logic from the follows source:
+            https://github.com/chattarajoy/Shatranj/blob/master/helperfunctions.py 27/7 """
         index = 0 
         colour_index = [WHITE, LIGHT_BROWN] 
         # iterates over every tile on the chess board

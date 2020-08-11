@@ -50,6 +50,7 @@ class King(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def move_list(self):
+        """ Generates a list contraining all of the king's viable moves """
         self.viable = []
         occupied = self.tiles_occupied()
         # generates potential moves
@@ -59,7 +60,6 @@ class King(Piece):
         self.viable[:] = [move for move in self.viable if move not in occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-        print(self.viable)
 
     def load_image(self):
         """ Loads in the sprite image for the king piece """
@@ -78,6 +78,28 @@ class Queen(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+
+    def move_list(self):
+        """ Generates a list containing all of the queen's viable moves """
+        self.viable = []
+        occupied = self.tiles_occupied()
+
+        # rook logic
+        r = [(self.x + i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # right
+        l = [(self.x - i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # left
+        d = [(self.x, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down
+        u = [(self.x, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up 
+        self.viable += r + l + d + u
+
+        # bishop logic
+        ur = [(self.x + i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up right
+        dr = [(self.x + i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down right 
+        ul = [(self.x - i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up left
+        dl = [(self.x - i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down left
+        self.viable += ur + dr + ul + dl
+
+        # removes moves that have an occupied tile
+        self.viable[:] = [move for move in self.viable if move not in occupied]
     
     def load_image(self):
         """ Loads in the sprite image for the queen piece """
@@ -97,15 +119,16 @@ class Rook(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def move_list(self):
-        """ Generates a list containing all of the rooks viable moves """
+        """ Generates a list containing all of the rook's viable moves """
         self.viable = []
         occupied = self.tiles_occupied()
-        for column in range(8):
-            for row in range(8):
-                if column == self.x or row == self.y:
-                    if (column, row) not in occupied:
-                        self.viable.append((column, row))
-        return self.viable
+        r = [(self.x + i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # right
+        l = [(self.x - i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # left
+        d = [(self.x, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down
+        u = [(self.x, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up 
+        self.viable += r + l + d + u
+        # removes moves that have an occupied tile
+        self.viable[:] = [move for move in self.viable if move not in occupied]
 
     def load_image(self):
         """ Loads in the sprite image for the rook piece """
@@ -126,9 +149,18 @@ class Bishop(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def move_list(self):
-        """ Generates a list containing all of the bishops viable moves """
+        """ Generates a list containing all of the bishop's viable moves. 
+            This function uses logic from the following source:
+             https://codereview.stackexchange.com/questions/94465/enumerating-moves-for-a-chess-piece 11/8 """
         self.viable = []
         occupied = self.tiles_occupied()
+        ur = [(self.x + i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up right
+        dr = [(self.x + i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down right 
+        ul = [(self.x - i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up left
+        dl = [(self.x - i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down left
+        self.viable += ur + dr + ul + dl
+        # removes moves that have an occupied tile
+        self.viable[:] = [move for move in self.viable if move not in occupied]
     
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
@@ -148,7 +180,7 @@ class Knight(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
 
     def move_list(self):
-        """ Generates a list containing all of the knights viable moves """
+        """ Generates a list containing all of the knight's viable moves """
         self.viable = []
         occupied = self.tiles_occupied()
         # adds potential moves
@@ -178,6 +210,7 @@ class Pawn(Piece):
         self.first = True
 
     def move_list(self):
+        """ Generates a list containing all of the pawn's viable moves """
         self.viable = []
         occupied = self.tiles_occupied()
         # white pawn
