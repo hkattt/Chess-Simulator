@@ -28,7 +28,9 @@ class Piece(pg.sprite.Sprite):
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
 
-    def tiles_occupied(self):
+    def friendly_occupied(self):
+        """ Returns a list containing the coordinates of all the tiles that are
+            occupied by friendly pieces """
         occupied = [] # list containing all the occupied squares
         if self.colour == "W": # white piece
             for piece in self.game.white_pieces:
@@ -37,6 +39,15 @@ class Piece(pg.sprite.Sprite):
             for piece in self.game.black_pieces:
                 occupied.append((piece.x, piece.y))
         return occupied
+
+    def occupied(self):
+        """ Returns a list containing the coordinates of all the tiles that are
+            currently occupied """
+        occupied = [] # list containing all the occupied squares
+        for piece in self.game.all_sprites:
+            occupied.append((piece.x, piece.y))
+        return occupied
+
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -51,7 +62,7 @@ class King(Piece):
     def move_list(self):
         """ Generates a list contraining all of the king's viable moves """
         self.viable = []
-        occupied = self.tiles_occupied()
+        occupied = self.friendly_occupied()
         # generates potential moves
         self.viable += [(self.x + 1, self.y), (self.x, self.y + 1), (self.x - 1, self.y), (self.x, self.y - 1), 
             (self.x + 1, self.y + 1), (self.x - 1, self.y - 1), (self.x + 1, self.y - 1), (self.x - 1, self.y + 1)]
@@ -80,24 +91,38 @@ class Queen(Piece):
     def move_list(self):
         """ Generates a list containing all of the queen's viable moves """
         self.viable = []
-        occupied = self.tiles_occupied()
-
+        occupied, friendly_occupied = self.occupied(), self.friendly_occupied()
+        rook_directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # rooks possible moving directions (i.e. right, left, up, down)
+        move_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)] # possible moving directions (i.e. up right, down right, up left, down left)
+        moves = []
         # rook logic
-        r = [(self.x + i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # right
-        l = [(self.x - i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # left
-        d = [(self.x, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down
-        u = [(self.x, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up 
-        self.viable += r + l + d + u
-
+        # iterates over each direction
+        for direction in rook_directions:
+            for i in range(1, 8):
+                if 0 <= self.x < 8 and 0 <= self.y < 8:
+                    # adding viable moves
+                    moves += [(self.x + i * direction[0], self.y + i * direction[1])]
+                # stops adding moves once a piece is found (can't move through pieces)
+                # this is done by breaking the loop (i.e. stopping the current direction)
+                if (self.x + i * direction[0], self.y + i * direction[1]) in occupied:
+                    break
         # bishop logic
-        ur = [(self.x + i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up right
-        dr = [(self.x + i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down right 
-        ul = [(self.x - i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up left
-        dl = [(self.x - i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down left
-        self.viable += ur + dr + ul + dl
-
+        # iterates over each direction
+        for direction in move_directions:
+            for i in range(1, 8):
+                if 0 <= self.x < 8 and 0 <= self.y < 8:
+                    # adding viable moves
+                    moves += [(self.x + i * direction[0], self.y + i * direction[1])]
+                # stops adding moves once a piece is found (can't move through pieces)
+                # this is done by breaking the loop (i.e. stooping the current direcion)
+                if (self.x + i * direction[0], self.y + i * direction[1]) in occupied:
+                    break
+        # adding the moves
+        self.viable += moves
         # removes moves that have an occupied tile
-        self.viable[:] = [move for move in self.viable if move not in occupied]
+        self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
+        # removes moves that are off the board
+        self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
     
     def load_image(self):
         """ Loads in the sprite image for the queen piece """
@@ -119,14 +144,25 @@ class Rook(Piece):
     def move_list(self):
         """ Generates a list containing all of the rook's viable moves """
         self.viable = []
-        occupied = self.tiles_occupied()
-        r = [(self.x + i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # right
-        l = [(self.x - i, self.y) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # left
-        d = [(self.x, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down
-        u = [(self.x, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up 
-        self.viable += r + l + d + u
+        occupied, friendly_occupied = self.occupied(), self.friendly_occupied()
+        move_directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # possible moving directions (i.e. right, left, up, down)
+        moves = []
+        # iterates over each direction
+        for direction in move_directions:
+            for i in range(1, 8):
+                if 0 <= self.x < 8 and 0 <= self.y < 8:
+                    # adding viable moves
+                    moves += [(self.x + i * direction[0], self.y + i * direction[1])]
+                # stops adding moves once a piece is found (can't move through pieces)
+                # this is done by breaking the loop (i.e. stopping the current direction)
+                if (self.x + i * direction[0], self.y + i * direction[1]) in occupied:
+                    break
+        # adding the moves
+        self.viable += moves
         # removes moves that have an occupied tile
-        self.viable[:] = [move for move in self.viable if move not in occupied]
+        self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
+        # removes moves that are off the board
+        self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 
     def load_image(self):
         """ Loads in the sprite image for the rook piece """
@@ -150,14 +186,25 @@ class Bishop(Piece):
             This function uses logic from the following source:
              https://codereview.stackexchange.com/questions/94465/enumerating-moves-for-a-chess-piece 11/8 """
         self.viable = []
-        occupied = self.tiles_occupied()
-        ur = [(self.x + i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up right
-        dr = [(self.x + i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down right 
-        ul = [(self.x - i, self.y + i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # up left
-        dl = [(self.x - i, self.y - i) for i in range(1, 8) if 0 <= self.x < 8 and 0 <= self.y < 8] # down left
-        self.viable += ur + dr + ul + dl
+        occupied, friendly_occupied = self.occupied(), self.friendly_occupied()
+        move_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)] # possible moving directions (i.e. up right, down right, up left, down left)
+        moves = []
+        # iterates over each direction
+        for direction in move_directions:
+            for i in range(1, 8):
+                if 0 <= self.x < 8 and 0 <= self.y < 8:
+                    # adding viable moves
+                    moves += [(self.x + i * direction[0], self.y + i * direction[1])]
+                # stops adding moves once a piece is found (can't move through pieces)
+                # this is done by breaking the loop (i.e. stooping the current direcion)
+                if (self.x + i * direction[0], self.y + i * direction[1]) in occupied:
+                    break
+        # adding the moves
+        self.viable += moves
         # removes moves that have an occupied tile
-        self.viable[:] = [move for move in self.viable if move not in occupied]
+        self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
+        # removes moves that are off the board
+        self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
     
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
@@ -179,7 +226,7 @@ class Knight(Piece):
     def move_list(self):
         """ Generates a list containing all of the knight's viable moves """
         self.viable = []
-        occupied = self.tiles_occupied()
+        occupied = self.friendly_occupied()
         # adds potential moves
         self.viable += [(self.x + 1, self.y + 2), (self.x + 2, self.y + 1), (self.x + 2, self.y - 1), (self.x + 1, self.y - 2),
                          (self.x - 1, self.y - 2), (self.x - 2, self.y - 1), (self.x - 2, self.y + 1), (self.x - 1, self.y + 2)]
@@ -209,7 +256,7 @@ class Pawn(Piece):
     def move_list(self):
         """ Generates a list containing all of the pawn's viable moves """
         self.viable = []
-        occupied = self.tiles_occupied()
+        occupied = self.friendly_occupied()
         # white pawn
         if self.colour == "W":
             # first move (pawns can jump two tiles)
