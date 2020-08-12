@@ -50,7 +50,6 @@ class Piece(pg.sprite.Sprite):
         for piece in self.game.all_sprites:
             occupied.append((piece.x, piece.y))
         return occupied
-
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
