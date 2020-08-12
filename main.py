@@ -114,11 +114,17 @@ class Game():
 
     def paint(self):
         """ Draws onto the window """
-        self.board_colours()
-        self.viable_colours()
+        self.board_colours() # draws the board colours
+        self.viable_colours() # draws the viable move colours
 
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, sprite)
+        # the current selected piece (one being moved) is drawn last
+        # this gives off the illusion that it is above the other pieces
+        if self.black.selected_piece != None: # black player is moving a piece
+            self.screen.blit(self.black.selected_piece.image, self.black.selected_piece)
+        elif self.white.selected_piece != None: # white player is moving a piece
+            self.screen.blit(self.white.selected_piece.image, self.white.selected_piece)
 
         pg.display.update() # updates the window
 
