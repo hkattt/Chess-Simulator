@@ -10,6 +10,8 @@ class Piece(pg.sprite.Sprite):
     def __init__(self, x, y, game):
         self.x = x
         self.y = y
+        self.original_x = x
+        self.original_y = y
         # copy of the game class, allowing the pieces to access information about 
         # other pieces on the board
         self.game = game
@@ -25,6 +27,7 @@ class Piece(pg.sprite.Sprite):
         else:
             self.groups = game.all_sprites, game.white_pieces
         self.viable = []
+        self.first = True # used to determine whether a pawn can jump two pieces
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
 
@@ -251,18 +254,19 @@ class Pawn(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
-        self.first = True
 
     def move_list(self):
         """ Generates a list containing all of the pawn's viable moves """
         self.viable = []
-        occupied = self.friendly_occupied()
+        occupied, friendly_occupied = self.occupied(), self.friendly_occupied()
         # white pawn
         if self.colour == "W":
+            self.viable += [(self.x, self.y - 1)]
+            # removes moves that have an occupied tile (stops pawn from moving forward when an enemy piece is on the way)
+            self.viable[:] = [move for move in self.viable if move not in occupied]
             # first move (pawns can jump two tiles)
             if self.first:
                 self.viable += [(self.x, self.y - 2)]
-                self.first = False
 
             # checks if the pawn can take any black pieces
             for piece in self.game.black_pieces:
@@ -272,14 +276,15 @@ class Pawn(Piece):
                 # top left
                 elif piece.x == self.x - 1 and piece.y == self.y - 1:
                     self.viable += [(piece.x, piece.y)]
-            self.viable += [(self.x, self.y - 1)]
 
         # black pawn
         else:
+            self.viable += [(self.x, self.y + 1)]
+            # removes moves that have an occupied tile (stops pawn from moving forward when an enemy piece is on the way)
+            self.viable[:] = [move for move in self.viable if move not in occupied]
             # first move (pawns can jump two tiles)
             if self.first:
                 self.viable += [(self.x, self.y + 2)]
-                self.first = False
 
             # checks if the pawn can take any black pieces
             for piece in self.game.white_pieces:
@@ -289,9 +294,8 @@ class Pawn(Piece):
                 # bottom left
                 elif piece.x == self.x - 1 and piece.y == self.y + 1:
                     self.viable += [(piece.x, piece.y)]
-            self.viable += [(self.x, self.y + 1)]
         # removes moves that have an occupied tile
-        self.viable[:] = [move for move in self.viable if move not in occupied]
+        self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 

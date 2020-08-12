@@ -44,15 +44,30 @@ class Player():
         # checks for state change (i.e. when the button is released)
         # does not do anything if the user did not click on a piece (i.e. clicked the board)
         if self.mouse_up(self.mousedown) and self.selected_piece != None:
-            self.snap_to_grid() 
-            # after the move it is the other players turn
-            self.turn = False
-            # player is not carrying a piece
-            self.selected_piece = None
-            if self.colour == "W":
-                self.game.black.turn = True
-            else:
-                self.game.white.turn = True
+            self.snap_to_grid()
+            if self.viable_move():
+                # after the move it is the other players turn
+                self.turn = False
+                # player is not carrying a piece
+                self.selected_piece = None
+                if self.colour == "W":
+                    self.game.black.turn = True
+                else:
+                    self.game.white.turn = True
+
+    def viable_move(self):
+        """ Checks if the current move is viable """
+        # checks if the current move is viable (legal move)
+        if (self.selected_piece.x, self.selected_piece.y) in self.selected_piece.viable:
+            self.selected_piece.first = False # for a pawn that completed its first move
+            # updates the selected pieces original position
+            self.selected_piece.original_x, self.selected_piece.original_y = self.selected_piece.x, self.selected_piece.y
+            return True
+        # if the move was not legal the selected piece is dropped and moved to its original position
+        self.selected_piece.x, self.selected_piece.y = self.selected_piece.original_x, self.selected_piece.original_y
+        self.selected_piece.rect.center = ((self.selected_piece.x * TILE_SIZE) + (TILE_SIZE / 2), (self.selected_piece.y * TILE_SIZE) + (TILE_SIZE / 2))
+        self.selected_piece = None
+        return False
 
     def clicked(self, mousePos):
         """ Determines which piece got clicked """
@@ -62,13 +77,15 @@ class Player():
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
                     self.selected_piece = piece
+                    self.selected_piece.move_list() # generates move list for the selected piece
         
         else:
             for piece in self.game.black_pieces:
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
                     self.selected_piece = piece
-        self.selected_piece.move_list()
+        if self.selected_piece != None:
+            self.selected_piece.move_list()
 
     def mouse_up(self, current):
         """ Looks for a statechange in the mouse press """
