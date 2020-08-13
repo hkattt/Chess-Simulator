@@ -60,6 +60,7 @@ class Player():
         # checks if the current move is viable (legal move)
         if (self.selected_piece.x, self.selected_piece.y) in self.selected_piece.viable:
             self.selected_piece.first = False # for a pawn that completed its first move
+            self.take_piece(self.selected_piece.x, self.selected_piece.y)
             # updates the selected pieces original position
             self.selected_piece.original_x, self.selected_piece.original_y = self.selected_piece.x, self.selected_piece.y
             return True
@@ -68,6 +69,17 @@ class Player():
         self.selected_piece.rect.center = ((self.selected_piece.x * TILE_SIZE) + (TILE_SIZE / 2), (self.selected_piece.y * TILE_SIZE) + (TILE_SIZE / 2))
         self.selected_piece = None
         return False
+
+    def take_piece(self, x, y):
+        """ Takes a piece """
+        # iterates over all the pieces
+        # this does not allow the player to take their own pieces as it is not a 
+        # viable move (i.e. it would not reach this point, the logic prevents it) 
+        for piece in self.game.all_sprites:
+            # checks if the current pieces coordinates is equal to the selected piece 
+            # and is not the selected piece itself
+            if piece.x == x and piece.y == y and piece != self.selected_piece:
+                piece.kill() # removes the piece from groups
 
     def clicked(self, mousePos):
         """ Determines which piece got clicked """
