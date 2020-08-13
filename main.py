@@ -31,6 +31,7 @@ class Game():
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
         self.white_pieces = pg.sprite.Group()
+        self.kings = pg.sprite.Group()
 
         # iterates over the board array
         # the board array holds the starting positions of all the pieces

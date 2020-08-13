@@ -60,7 +60,9 @@ class King(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
-
+        # adds the king into the kings group
+        self.game.kings.add(self)
+        
     def move_list(self):
         """ Generates a list contraining all of the king's viable moves """
         self.viable = []
@@ -73,6 +75,20 @@ class King(Piece):
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 
+    def in_check(self):
+        all_moves = []
+        if self.colour == "W":
+            for piece in self.game.black_pieces:
+                piece.move_list()
+                all_moves += piece.viable
+        else:
+            for piece in self.game.white_pieces:
+                piece.move_list()
+                all_moves += piece.viable
+        if (self.x, self.y) in all_moves:
+            return True
+        return False
+        
     def load_image(self):
         """ Loads in the sprite image for the king piece """
         if self.colour == "B":
