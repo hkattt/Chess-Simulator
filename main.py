@@ -120,7 +120,7 @@ class Game():
         for king in self.kings:
             if king.checked: # king is checked
                 pg.draw.rect(self.screen, BLACK, (king.x * TILE_SIZE, king.y * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
-                pg.draw.rect(self.screen, RED, (king.x * TILE_SIZE, king.y * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
+                pg.draw.rect(self.screen, LIGHT_RED, (king.x * TILE_SIZE, king.y * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
                 
     def paint(self):
         """ Draws onto the window """
