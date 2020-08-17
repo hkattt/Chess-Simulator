@@ -46,6 +46,9 @@ class Player():
         if self.mouse_up(self.mousedown) and self.selected_piece != None:
             self.snap_to_grid()
             if self.viable_move():
+                # checks if the kings are in check (this is mainly for aesthetic purposes)
+                for king in self.game.kings:
+                    king.in_check()
                 # after the move it is the other players turn
                 self.turn = False
                 # player is not carrying a piece
@@ -89,15 +92,16 @@ class Player():
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
                     self.selected_piece = piece
-                    self.selected_piece.move_list() # generates move list for the selected piece
         
         else:
             for piece in self.game.black_pieces:
                 # a piece is clicked if the mouse cursor is hovering over it (and the button got pressed)
                 if piece.rect.collidepoint(mousePos):
                     self.selected_piece = piece
+        # generates move list
         if self.selected_piece != None:
             self.selected_piece.move_list()
+            self.selected_piece.fix_check() # removes moves that do not block / prevent a check
 
     def mouse_up(self, current):
         """ Looks for a statechange in the mouse press """

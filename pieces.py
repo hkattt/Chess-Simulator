@@ -50,6 +50,22 @@ class Piece(pg.sprite.Sprite):
         for piece in self.game.all_sprites:
             occupied.append((piece.x, piece.y))
         return occupied
+
+    def fix_check(self):
+        original_x, original_y = self.x, self.y
+        new_viable = []
+        for move in self.viable:
+            self.x, self.y = move[0], move[1]
+            if self.king.in_check() != True:
+                new_viable.append(move)
+        self.x, self.y = original_x, original_y
+        self.viable = new_viable
+
+    def friendly_king(self):
+        for king in self.game.kings:
+            if king.colour == self.colour:
+                return king
+
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -62,6 +78,8 @@ class King(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
         # adds the king into the kings group
         self.game.kings.add(self)
+        self.checked = False
+        self.king = self
         
     def move_list(self):
         """ Generates a list contraining all of the king's viable moves """
@@ -86,7 +104,9 @@ class King(Piece):
                 piece.move_list()
                 all_moves += piece.viable
         if (self.x, self.y) in all_moves:
+            self.checked = True
             return True
+        self.checked = False
         return False
         
     def load_image(self):
@@ -105,6 +125,8 @@ class Queen(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        # access to the friendly king
+        self.king = self.friendly_king()
 
     def move_list(self):
         """ Generates a list containing all of the queen's viable moves """
@@ -158,6 +180,8 @@ class Rook(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        # access to the friendly king
+        self.king = self.friendly_king()
 
     def move_list(self):
         """ Generates a list containing all of the rook's viable moves """
@@ -198,6 +222,8 @@ class Bishop(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        # access to the friendly king
+        self.king = self.friendly_king()
 
     def move_list(self):
         """ Generates a list containing all of the bishop's viable moves. 
@@ -223,7 +249,7 @@ class Bishop(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-    
+        
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
         if self.colour == "B":
@@ -240,6 +266,8 @@ class Knight(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        # access to the friendly king
+        self.king = self.friendly_king()
 
     def move_list(self):
         """ Generates a list containing all of the knight's viable moves """
@@ -269,6 +297,8 @@ class Pawn(Piece):
         self.rect = self.image.get_rect()
         # positions the piece in the centre of the tile
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
+        # access to the friendly king
+        self.king = self.friendly_king()
 
     def move_list(self):
         """ Generates a list containing all of the pawn's viable moves """

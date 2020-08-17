@@ -33,15 +33,16 @@ class Game():
         self.white_pieces = pg.sprite.Group()
         self.kings = pg.sprite.Group()
 
+        # kings are created before all of the other pieces
+        King(4, 0, self)
+        King(4, 7, self)
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
         for row, tiles in enumerate(self.board):
             for column, tile in enumerate(tiles):
                 # creates object based on each tiles string (string corresponding to each tile)
                 if tile != ".":
-                    if tile == "K":
-                        King(column, row, self)
-                    elif tile == "Q":
+                    if tile == "Q":
                         Queen(column, row, self)
                     elif tile == "R":
                         Rook(column, row, self)
@@ -113,10 +114,20 @@ class Game():
                         pg.draw.rect(self.screen, BLACK, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
                         pg.draw.rect(self.screen, DARK_GREY, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
 
+    def check_colours(self):
+        """ Draws the checked tiles onto the board """
+        # iterates over the kings:
+        for king in self.kings:
+            if king.checked: # king is checked
+                pg.draw.rect(self.screen, BLACK, (king.x * TILE_SIZE, king.y * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
+                pg.draw.rect(self.screen, RED, (king.x * TILE_SIZE, king.y * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
+                
+
     def paint(self):
         """ Draws onto the window """
         self.board_colours() # draws the board colours
         self.viable_colours() # draws the viable move colours
+        self.check_colours() # draws the check colours
 
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, sprite)
