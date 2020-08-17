@@ -28,7 +28,6 @@ class Piece(pg.sprite.Sprite):
             self.groups = game.all_sprites, game.white_pieces
         self.viable = []
         self.first = True # used to determine whether a pawn can jump two pieces
-        self.checking = False
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
 
@@ -67,7 +66,7 @@ class Piece(pg.sprite.Sprite):
             for piece in self.game.all_sprites:
                 # if the current piece is checking and is in the same position as the current move
                 # the move is viable (i.e. if the current move can take the piece putting its king in check)
-                if piece.checking:
+                if piece.is_checking():
                     if piece.x == self.x and piece.y == self.y:
                         new_viable.append(move)
         # sets the pieces position back to the original position
