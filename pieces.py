@@ -53,27 +53,40 @@ class Piece(pg.sprite.Sprite):
         return occupied
 
     def fix_check(self):
-        original_x, original_y = self.x, self.y
+        """ Removes moves that do not block / prevent a check """
+        original_x, original_y = self.x, self.y # keeps track of the pieces original position
         new_viable = []
+        # iterates over all the moves
         for move in self.viable:
-            self.x, self.y = move[0], move[1]
-            if self.king.in_check() != True:
+            self.x, self.y = move[0], move[1] # updates the pieces position to the current move
+            # checks if this move prevents / blocks the check
+            # if it does, it is added to the new viable list
+            if self.king.in_check() != True: 
                 new_viable.append(move)
+            # iterates over all the pieces
             for piece in self.game.all_sprites:
+                # if the current piece is checking and is in the same position as the current move
+                # the move is viable (i.e. if the current move can take the piece putting its king in check)
                 if piece.checking:
                     if piece.x == self.x and piece.y == self.y:
                         new_viable.append(move)
+        # sets the pieces position back to the original position
         self.x, self.y = original_x, original_y
         self.viable = new_viable
 
     def is_checking(self):
+        """ Checks if the piece is putting the opposition king into check """
         for king in self.game.kings:
+            # king on the opposite team
             if king.colour != self.colour:
+                # kings current position is one of the viable moves
                 if (king.x, king.y) in self.viable:
                     return True
         return False
 
     def friendly_king(self):
+        """ Returns the friendly king object
+            This serves the purpose of giving each piece access to its king """
         for king in self.game.kings:
             if king.colour == self.colour:
                 return king
@@ -175,7 +188,6 @@ class Queen(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-        self.checking = self.is_checking()
     
     def load_image(self):
         """ Loads in the sprite image for the queen piece """
@@ -218,7 +230,6 @@ class Rook(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-        self.checking = self.is_checking()
 
     def load_image(self):
         """ Loads in the sprite image for the rook piece """
@@ -263,7 +274,6 @@ class Bishop(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-        self.checking = self.is_checking()
         
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
@@ -295,7 +305,6 @@ class Knight(Piece):
         self.viable[:] = [move for move in self.viable if move not in occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-        self.checking = self.is_checking()
 
     def load_image(self):
         """ Loads in the sprite image for the knight piece """
@@ -359,7 +368,6 @@ class Pawn(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
-        self.checking = self.is_checking()
 
     def load_image(self):
         """ Loads in the sprite image for the pawn piece """

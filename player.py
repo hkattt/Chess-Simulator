@@ -49,6 +49,8 @@ class Player():
                 # checks if the kings are in check (this is mainly for aesthetic purposes)
                 for king in self.game.kings:
                     king.in_check()
+                # checks if the selected piece put the opposition king into check
+                self.selected_piece.checking = self.selected_piece.is_checking()
                 # after the move it is the other players turn
                 self.turn = False
                 # player is not carrying a piece
