@@ -28,6 +28,7 @@ class Piece(pg.sprite.Sprite):
             self.groups = game.all_sprites, game.white_pieces
         self.viable = []
         self.first = True # used to determine whether a pawn can jump two pieces
+        self.checking = False
         # initiates the sprite class
         pg.sprite.Sprite.__init__(self, self.groups)
 
@@ -58,8 +59,19 @@ class Piece(pg.sprite.Sprite):
             self.x, self.y = move[0], move[1]
             if self.king.in_check() != True:
                 new_viable.append(move)
+            for piece in self.game.all_sprites:
+                if piece.checking:
+                    if piece.x == self.x and piece.y == self.y:
+                        new_viable.append(move)
         self.x, self.y = original_x, original_y
         self.viable = new_viable
+
+    def is_checking(self):
+        for king in self.game.kings:
+            if king.colour != self.colour:
+                if (king.x, king.y) in self.viable:
+                    return True
+        return False
 
     def friendly_king(self):
         for king in self.game.kings:
@@ -163,6 +175,7 @@ class Queen(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+        self.checking = self.is_checking()
     
     def load_image(self):
         """ Loads in the sprite image for the queen piece """
@@ -205,6 +218,7 @@ class Rook(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+        self.checking = self.is_checking()
 
     def load_image(self):
         """ Loads in the sprite image for the rook piece """
@@ -249,6 +263,7 @@ class Bishop(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+        self.checking = self.is_checking()
         
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
@@ -280,6 +295,7 @@ class Knight(Piece):
         self.viable[:] = [move for move in self.viable if move not in occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+        self.checking = self.is_checking()
 
     def load_image(self):
         """ Loads in the sprite image for the knight piece """
@@ -343,6 +359,7 @@ class Pawn(Piece):
         self.viable[:] = [move for move in self.viable if move not in friendly_occupied]
         # removes moves that are off the board
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
+        self.checking = self.is_checking()
 
     def load_image(self):
         """ Loads in the sprite image for the pawn piece """
