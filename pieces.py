@@ -57,32 +57,32 @@ class Piece(pg.sprite.Sprite):
         new_viable = []
         # iterates over all the moves
         for move in self.viable:
-            # iterates over all the pieces
-            for piece in self.game.all_sprites:
-                # if the current piece is checking and is in the same position as the current move
-                # the move is viable (i.e. if the current move can take the piece putting its king in check)
-                if piece.is_checking():
-                    if piece.x == move[0] and piece.y == move[1]:
-                        self.x, self.y = move[0], move[1] # updates the pieces position to the current move
-                        # removes the current piece, this allows the check to see if the king would be in check
-                        # once the piece has been taken
-                        piece.kill()
-                        # if the king is not in check it is a viable move
-                        if self.king.in_check() != True:
-                            new_viable.append(move)
-                        # adding the piece back into its groups
-                        piece.add(piece.game.all_sprites)
-                        if piece.colour == "W":
-                            piece.add(self.game.white_pieces)
-                        else:
-                            piece.add(self.game.black_pieces)
-                        # initiates the sprite class
-                        pg.sprite.Sprite.__init__(piece, piece.groups)
             self.x, self.y = move[0], move[1] # updates the pieces position to the current move
-            # checks if this move prevents / blocks the check
-            # if it does, it is added to the new viable list
-            if self.king.in_check() != True: 
+            # if the current move does not result in the king being placed in check it is viable
+            if self.king.in_check() != True:
                 new_viable.append(move)
+            # iterates over all of the pieces
+            for piece in self.game.all_sprites:
+                # checks if the cooridnates of the current piece are the same as the current move
+                # i.e. is the move taking the current piece
+                if piece.x == move[0] and piece.y == move[1] and piece != self:
+                    piece.kill() # temporarily removes the current piece from its groups
+                    # if the current move results in a check it is removed from the viable list
+                    # otherwise it is added if it is not already in the list
+                    if self.king.in_check():
+                        new_viable.remove(move)
+                    else:
+                        if move not in new_viable:
+                            new_viable.append(move)
+                    # adding the piece back into its groups
+                    piece.add(piece.game.all_sprites)
+                    if piece.colour == "W":
+                        piece.add(self.game.white_pieces)
+                    else:
+                        piece.add(self.game.black_pieces)
+                    # initiates the sprite class
+                    pg.sprite.Sprite.__init__(piece, piece.groups)
+                    break
         # sets the pieces position back to the original position
         self.x, self.y = original_x, original_y
         self.viable = new_viable
