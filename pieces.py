@@ -87,16 +87,6 @@ class Piece(pg.sprite.Sprite):
         self.x, self.y = original_x, original_y
         self.viable = new_viable
 
-    def is_checking(self):
-        """ Checks if the piece is putting the opposition king into check """
-        for king in self.game.kings:
-            # king on the opposite team
-            if king.colour != self.colour:
-                # kings current position is one of the viable moves
-                if (king.x, king.y) in self.viable:
-                    return True
-        return False
-
     def friendly_king(self):
         """ Returns the friendly king object
             This serves the purpose of giving each piece access to its king """
