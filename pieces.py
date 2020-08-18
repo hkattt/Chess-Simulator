@@ -71,8 +71,8 @@ class Piece(pg.sprite.Sprite):
                         if self.king.in_check() != True:
                             new_viable.append(move)
                         # adding the piece back into its groups
-                        piece.add(self.game.all_sprites)
-                        if self.colour == "W":
+                        piece.add(piece.game.all_sprites)
+                        if piece.colour == "W":
                             piece.add(self.game.white_pieces)
                         else:
                             piece.add(self.game.black_pieces)
