@@ -56,19 +56,40 @@ class Piece(pg.sprite.Sprite):
         original_x, original_y = self.x, self.y # keeps track of the pieces original position
         new_viable = []
         # iterates over all the moves
+        print(self.game.all_sprites)
         for move in self.viable:
-            self.x, self.y = move[0], move[1] # updates the pieces position to the current move
-            # checks if this move prevents / blocks the check
-            # if it does, it is added to the new viable list
-            if self.king.in_check() != True: 
-                new_viable.append(move)
             # iterates over all the pieces
             for piece in self.game.all_sprites:
                 # if the current piece is checking and is in the same position as the current move
                 # the move is viable (i.e. if the current move can take the piece putting its king in check)
                 if piece.is_checking():
-                    if piece.x == self.x and piece.y == self.y:
-                        new_viable.append(move)
+                    if piece.x == move[0] and piece.y == move[1]:
+                        self.x, self.y = move[0], move[1] # updates the pieces position to the current move
+                        # removes the current piece, this allows the check to see if the king would be in check
+                        # once the piece has been taken
+                        piece.kill()
+                        print("groups", piece.groups)
+                        print("piece", piece)
+                        # if the king is not in check it is a viable move
+                        if self.king.in_check() != True:
+                            new_viable.append(move)
+                        # adding the piece back into its groups
+                        piece.add(self.game.all_sprites)
+                        if self.colour == "W":
+                            piece.add(self.game.white_pieces)
+                        else:
+                            piece.add(self.game.black_pieces)
+                        # initiates the sprite class
+                        pg.sprite.Sprite.__init__(piece, piece.groups)
+                        print("groups", piece.groups)
+                        print("piece", piece)
+                        print(self.game.all_sprites)
+                        print(self.game.white_pieces)
+            self.x, self.y = move[0], move[1] # updates the pieces position to the current move
+            # checks if this move prevents / blocks the check
+            # if it does, it is added to the new viable list
+            if self.king.in_check() != True: 
+                new_viable.append(move)
         # sets the pieces position back to the original position
         self.x, self.y = original_x, original_y
         self.viable = new_viable
@@ -334,7 +355,7 @@ class Pawn(Piece):
             # removes moves that have an occupied tile (stops pawn from moving forward when an enemy piece is on the way)
             self.viable[:] = [move for move in self.viable if move not in occupied]
             # first move (pawns can jump two tiles)
-            if self.first:
+            if self.first and (self.x, self.y - 1) not in occupied:
                 self.viable += [(self.x, self.y - 2)]
 
             # checks if the pawn can take any black pieces
@@ -352,7 +373,7 @@ class Pawn(Piece):
             # removes moves that have an occupied tile (stops pawn from moving forward when an enemy piece is on the way)
             self.viable[:] = [move for move in self.viable if move not in occupied]
             # first move (pawns can jump two tiles)
-            if self.first:
+            if self.first and (self.x, self.y + 1) not in occupied :
                 self.viable += [(self.x, self.y + 2)]
 
             # checks if the pawn can take any black pieces
