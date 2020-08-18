@@ -56,7 +56,6 @@ class Piece(pg.sprite.Sprite):
         original_x, original_y = self.x, self.y # keeps track of the pieces original position
         new_viable = []
         # iterates over all the moves
-        print(self.game.all_sprites)
         for move in self.viable:
             # iterates over all the pieces
             for piece in self.game.all_sprites:
@@ -68,8 +67,6 @@ class Piece(pg.sprite.Sprite):
                         # removes the current piece, this allows the check to see if the king would be in check
                         # once the piece has been taken
                         piece.kill()
-                        print("groups", piece.groups)
-                        print("piece", piece)
                         # if the king is not in check it is a viable move
                         if self.king.in_check() != True:
                             new_viable.append(move)
@@ -81,10 +78,6 @@ class Piece(pg.sprite.Sprite):
                             piece.add(self.game.black_pieces)
                         # initiates the sprite class
                         pg.sprite.Sprite.__init__(piece, piece.groups)
-                        print("groups", piece.groups)
-                        print("piece", piece)
-                        print(self.game.all_sprites)
-                        print(self.game.white_pieces)
             self.x, self.y = move[0], move[1] # updates the pieces position to the current move
             # checks if this move prevents / blocks the check
             # if it does, it is added to the new viable list
@@ -355,7 +348,7 @@ class Pawn(Piece):
             # removes moves that have an occupied tile (stops pawn from moving forward when an enemy piece is on the way)
             self.viable[:] = [move for move in self.viable if move not in occupied]
             # first move (pawns can jump two tiles)
-            if self.first and (self.x, self.y - 1) not in occupied:
+            if self.first and (self.x, self.y - 1) not in occupied and (self.x, self.y - 2) not in occupied:
                 self.viable += [(self.x, self.y - 2)]
 
             # checks if the pawn can take any black pieces
@@ -373,7 +366,7 @@ class Pawn(Piece):
             # removes moves that have an occupied tile (stops pawn from moving forward when an enemy piece is on the way)
             self.viable[:] = [move for move in self.viable if move not in occupied]
             # first move (pawns can jump two tiles)
-            if self.first and (self.x, self.y + 1) not in occupied :
+            if self.first and (self.x, self.y + 1) not in occupied and (self.x, self.y + 2) not in occupied:
                 self.viable += [(self.x, self.y + 2)]
 
             # checks if the pawn can take any black pieces
