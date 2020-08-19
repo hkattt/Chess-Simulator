@@ -170,7 +170,6 @@ class King(Piece):
         if len(all_moves) == 0:
             return True
         return False
-
         
     def load_image(self):
         """ Loads in the sprite image for the king piece """

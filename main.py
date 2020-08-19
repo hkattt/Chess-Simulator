@@ -143,7 +143,7 @@ class Game():
     def end_screen(self):
         """ Screen after a player has been checkmated """
         self.paint() # updates the screen
-        text = self.font.render("CHECK MATE", True, RED) # font
+        text = self.font.render("CHECK MATE", True, LIGHT_RED) # font
         text_rect = text.get_rect() # fonts rect
         text_rect.center = WIDTH // 2, HEIGHT // 2 # fonts position
         running = True
