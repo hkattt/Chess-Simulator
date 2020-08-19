@@ -47,8 +47,12 @@ class Player():
             self.snap_to_grid()
             if self.viable_move():
                 # checks if the kings are in check (this is mainly for aesthetic purposes)
+                # if a king is in check, then it will check to see if a check mate occurred
                 for king in self.game.kings:
-                    king.in_check()
+                    if king.in_check():
+                        if king.check_mate():
+                            self.game.playing = False
+                            self.game.running = False
                 # after the move it is the other players turn
                 self.turn = False
                 # player is not carrying a piece

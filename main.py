@@ -19,6 +19,7 @@ class Game():
         self.clock = pg.time.Clock() # controls FPS
         self.running = True 
         self.board = board # board containing the position of each piece
+        self.font = pg.font.Font("freesansbold.ttf", 32)
 
     def new(self):
         """ Creates a new game """
@@ -139,6 +140,26 @@ class Game():
 
         pg.display.update() # updates the window
 
+    def end_screen(self):
+        """ Screen after a player has been checkmated """
+        self.paint() # updates the screen
+        text = self.font.render("CHECK MATE", True, RED) # font
+        text_rect = text.get_rect() # fonts rect
+        text_rect.center = WIDTH // 2, HEIGHT // 2 # fonts position
+        running = True
+        while running:
+            for event in pg.event.get():
+                # checks if the user wants to quit the game
+                if event.type == pg.QUIT:
+                    running = False
+                if event.type == pg.KEYDOWN:
+                    # checks if the user pressed the escape key
+                    if event.key == pg.K_ESCAPE:
+                        running = False
+            self.screen.blit(text, text_rect)
+            pg.display.update()
+
 game = Game()
 while game.running:
     game.new()
+    game.end_screen()

@@ -122,20 +122,55 @@ class King(Piece):
         self.viable[:] = [move for move in self.viable if move[0] <= 7 if move[0] >= 0 if move[1] <= 7 if move[1] >= 0]
 
     def in_check(self):
-        all_moves = []
-        if self.colour == "W":
+        """ Checks to see if the king is in check """
+        all_moves = [] # list containing all possible moves
+        # black
+        if self.colour == "W": 
+            # iterates over all of the black pieces and adds their possible
+            # moves to all_moves
             for piece in self.game.black_pieces:
                 piece.move_list()
                 all_moves += piece.viable
+        # black
         else:
+            # iterates over all of the white pieces and adds their possible
+            # moves to all_moves
             for piece in self.game.white_pieces:
                 piece.move_list()
                 all_moves += piece.viable
+        # if the kings' current position is the same as a potential move
+        # then he is in check
         if (self.x, self.y) in all_moves:
             self.checked = True
             return True
         self.checked = False
         return False
+
+    def check_mate(self):
+        """ Checks if the king has been placed in check mate """
+        all_moves = [] # list containing all possible moves
+        # white 
+        if self.colour == "W":
+            # iterates over all friendly (white) pieces and adds their potential
+            # moves to all_moves
+            for piece in self.game.white_pieces:
+                piece.move_list()
+                piece.fix_check()
+                all_moves += piece.viable
+        # black
+        else:
+            # iterates over all friendly (black) pieces and adds their potential
+            # moves to all_moves
+            for piece in self.game.black_pieces:
+                piece.move_list()
+                piece.fix_check()
+                all_moves += piece.viable
+        # if there are no mores in all_moves (i.e. length of the list = 0) the king
+        # has been check mated
+        if len(all_moves) == 0:
+            return True
+        return False
+
         
     def load_image(self):
         """ Loads in the sprite image for the king piece """
