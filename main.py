@@ -142,22 +142,24 @@ class Game():
 
     def end_screen(self):
         """ Screen after a player has been checkmated """
-        self.paint() # updates the screen
-        text = self.font.render("CHECK MATE", True, LIGHT_RED) # font
-        text_rect = text.get_rect() # fonts rect
-        text_rect.center = WIDTH // 2, HEIGHT // 2 # fonts position
-        running = True
-        while running:
-            for event in pg.event.get():
-                # checks if the user wants to quit the game
-                if event.type == pg.QUIT:
-                    running = False
-                if event.type == pg.KEYDOWN:
-                    # checks if the user pressed the escape key
-                    if event.key == pg.K_ESCAPE:
-                        running = False
-            self.screen.blit(text, text_rect)
-            pg.display.update()
+        for king in self.kings:
+            if king.checked:
+                self.paint() # updates the screen
+                text = self.font.render("CHECK MATE", True, LIGHT_RED) # font
+                text_rect = text.get_rect() # fonts rect
+                text_rect.center = WIDTH // 2, HEIGHT // 2 # fonts position
+                running = True
+                while running:
+                    for event in pg.event.get():
+                        # checks if the user wants to quit the game
+                        if event.type == pg.QUIT:
+                            running = False
+                        if event.type == pg.KEYDOWN:
+                            # checks if the user pressed the escape key
+                            if event.key == pg.K_ESCAPE:
+                                running = False
+                    self.screen.blit(text, text_rect)
+                    pg.display.update()
 
 game = Game()
 while game.running:
