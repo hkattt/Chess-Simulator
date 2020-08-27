@@ -70,7 +70,8 @@ class Piece(pg.sprite.Sprite):
                     # if the current move results in a check it is removed from the viable list
                     # otherwise it is added if it is not already in the list
                     if self.king.in_check():
-                        new_viable.remove(move)
+                        if move in new_viable:
+                            new_viable.remove(move)
                     else:
                         if move not in new_viable:
                             new_viable.append(move)
