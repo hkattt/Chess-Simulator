@@ -95,6 +95,26 @@ class Piece(pg.sprite.Sprite):
             if king.colour == self.colour:
                 return king
 
+    def all_moves(self):
+        moves = [] # list containing all possible moves
+        # white 
+        if self.colour == "W":
+            # iterates over all friendly (white) pieces and adds their potential
+            # moves to all_moves
+            for piece in self.game.white_pieces:
+                piece.move_list()
+                piece.fix_check()
+                moves += piece.viable
+        # black
+        else:
+            # iterates over all friendly (black) pieces and adds their potential
+            # moves to all_moves
+            for piece in self.game.black_pieces:
+                piece.move_list()
+                piece.fix_check()
+                moves += piece.viable
+        return moves
+
 class King(Piece):
     def __init__(self, x, y, game):
         super().__init__(x, y, game)
@@ -149,26 +169,10 @@ class King(Piece):
 
     def check_mate(self):
         """ Checks if the king has been placed in check mate """
-        all_moves = [] # list containing all possible moves
-        # white 
-        if self.colour == "W":
-            # iterates over all friendly (white) pieces and adds their potential
-            # moves to all_moves
-            for piece in self.game.white_pieces:
-                piece.move_list()
-                piece.fix_check()
-                all_moves += piece.viable
-        # black
-        else:
-            # iterates over all friendly (black) pieces and adds their potential
-            # moves to all_moves
-            for piece in self.game.black_pieces:
-                piece.move_list()
-                piece.fix_check()
-                all_moves += piece.viable
+        moves = self.all_moves()
         # if there are no mores in all_moves (i.e. length of the list = 0) the king
         # has been check mated
-        if len(all_moves) == 0:
+        if len(moves) == 0:
             return True
         return False
         

@@ -11,7 +11,7 @@ class Player():
     def __init__(self, colour, game):
         self.colour = colour
         self.game = game
-        if colour == "W":
+        if self.colour == "W":
             self.turn = True
         else:
             self.turn = False
