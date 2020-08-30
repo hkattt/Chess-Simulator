@@ -30,17 +30,26 @@ class AI():
 
         for piece in pieces:
             piece.move_list()
+            piece.fix_check()
             for move in piece.viable:
                 board_copy = self.new_board(piece, move)
+                for row in board_copy:
+                    print(row)
+                return
                 value = self.minimax(self.depth - 1, board_copy, False)
 
     def minimax(self, depth, board, isMaximizing):
         if depth == 0:
             return -self.board_evaluation(board)
 
+        self.generate_temp(board)
+        
         if isMaximizing:
             best = -9999
-            pass
+            """
+            for piece in self.temp_all_sprites:
+                piece.move_list()
+                return""""
 
 
     def new_board(self, piece, move):
@@ -57,32 +66,7 @@ class AI():
         return value
 
     def generate_temp(self, board):
-        # creates sprite groups
-        self.temp_all_sprites = pg.sprite.Group()
-        self.temp_black_pieces = pg.sprite.Group()
-        self.temp_white_pieces = pg.sprite.Group()
-        for row, tiles in enumerate(board):
-            for column, tile in enumerate(tiles):
-                # creates object based on each tiles string (string corresponding to each tile)
-                if tile != ".":
-                    # tile colour
-                    if tile[0] == "B":
-                        colour = "B"
-                    else:
-                        colour = "W"
-                    if tile[1:] == "K":
-                        King(column, row, colour, self)
-                    elif tile[1:] == "Q":
-                        Queen(column, row, colour, self)
-                    elif tile[1:] == "R":
-                        Rook(column, row, colour, self)
-                    elif tile[1:] == "B":
-                        Bishop(column, row, colour, self)
-                    elif tile[1:] == "Kn":
-                        Knight(column, row, colour, self)
-                    elif tile[1:] == "P":
-                        Pawn(column, row, colour, self)
-
+        pass
 
 
 

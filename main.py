@@ -35,13 +35,11 @@ class Game():
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
         self.white_pieces = pg.sprite.Group()
-        self.colours = [self.black_pieces, self.white_pieces]
         self.kings = pg.sprite.Group()
-        colours = ["B", "W"]
 
         # kings are created before all of the other pieces
-        King(4, 0, "B", self, (self.all_sprites, self.black_pieces))
-        King(4, 7, "W", self, (self.all_sprites, self.white_pieces))
+        King(4, 0, "B", self)
+        King(4, 7, "W", self)
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
         for row, tiles in enumerate(self.board):
@@ -50,19 +48,19 @@ class Game():
                 if tile != ".":
                     # tile colour
                     if tile[0] == "B":
-                        index = 0
+                        colour = "B"
                     else:
-                        index = 1
+                        colour = "W"
                     if tile[1:] == "Q":
-                        Queen(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
+                        Queen(column, row, colour, self)
                     elif tile[1:] == "R":
-                        Rook(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
+                        Rook(column, row, colour, self)
                     elif tile[1:] == "B":
-                        Bishop(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
+                        Bishop(column, row, colour, self)
                     elif tile[1:] == "Kn":
-                        Knight(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
+                        Knight(column, row, colour, self)
                     elif tile[1:] == "P":
-                        Pawn(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
+                        Pawn(column, row, colour, self)
         self.ai.move()
         self.run()
 
