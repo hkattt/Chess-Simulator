@@ -68,6 +68,7 @@ class Player():
         if (self.selected_piece.x, self.selected_piece.y) in self.selected_piece.viable:
             self.selected_piece.first = False # for a pawn that completed its first move
             self.take_piece(self.selected_piece.x, self.selected_piece.y)
+            self.update_board()
             # updates the selected pieces original position
             self.selected_piece.original_x, self.selected_piece.original_y = self.selected_piece.x, self.selected_piece.y
             return True
@@ -135,4 +136,9 @@ class Player():
         # updates the pieces position to the centre of the closest tile
         self.selected_piece.rect.center = (x, y)
         # board coordinates
-        self.selected_piece.x, self.selected_piece.y = (x - (TILE_SIZE / 2)) / TILE_SIZE, (y - (TILE_SIZE / 2)) / TILE_SIZE
+        self.selected_piece.x, self.selected_piece.y = int((x - (TILE_SIZE / 2)) / TILE_SIZE), int((y - (TILE_SIZE / 2)) / TILE_SIZE)
+
+    def update_board(self):
+        """ Updates the board list """
+        self.game.board[self.selected_piece.original_y][self.selected_piece.original_x] = "."
+        self.game.board[self.selected_piece.y][self.selected_piece.x] = self.selected_piece.colour + self.selected_piece.symbol

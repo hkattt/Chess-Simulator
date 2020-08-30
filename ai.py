@@ -1,5 +1,7 @@
 # AI CLASS
 
+import pygame as pg
+
 class AI():
     def __init__(self, colour, game):
         self.colour = colour
@@ -10,4 +12,14 @@ class AI():
             self.turn = False
 
     def move(self):
-        pass
+        if self.colour == "W":
+            pieces = self.game.white_pieces
+            enemy_pieces = self.game.black_pieces
+        else:
+            pieces = self.game.black_pieces
+            enemy_pieces = self.game.white_pieces
+        best_move = float('-inf')
+        final_move = None
+
+
+

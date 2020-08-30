@@ -8,6 +8,7 @@ import time
 # imports other game files
 from pieces import *
 from player import *
+from ai import *
 from board import *
 
 pg.init() 
@@ -27,6 +28,8 @@ class Game():
         self.white = Player("W", self)
         self.black = Player("B", self)
         self.teams = [self.white, self.black]
+        self.ai = AI("B", self)
+
 
         # creates sprite groups
         self.all_sprites = pg.sprite.Group()
@@ -35,24 +38,30 @@ class Game():
         self.kings = pg.sprite.Group()
 
         # kings are created before all of the other pieces
-        King(4, 0, self)
-        King(4, 7, self)
+        King(4, 0, "B", self)
+        King(4, 7, "W", self)
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
         for row, tiles in enumerate(self.board):
             for column, tile in enumerate(tiles):
                 # creates object based on each tiles string (string corresponding to each tile)
                 if tile != ".":
-                    if tile == "Q":
-                        Queen(column, row, self)
-                    elif tile == "R":
-                        Rook(column, row, self)
-                    elif tile == "B":
-                        Bishop(column, row, self)
-                    elif tile == "Kn":
-                        Knight(column, row, self)
-                    elif tile == "P":
-                        Pawn(column, row, self)
+                    # tile colour
+                    if tile[0] == "B":
+                        colour = "B"
+                    else:
+                        colour = "W"
+                    if tile[1:] == "Q":
+                        Queen(column, row, colour, self)
+                    elif tile[1:] == "R":
+                        Rook(column, row, colour, self)
+                    elif tile[1:] == "B":
+                        Bishop(column, row, colour, self)
+                    elif tile[1:] == "Kn":
+                        Knight(column, row, colour, self)
+                    elif tile[1:] == "P":
+                        Pawn(column, row, colour, self)
+        self.ai.move()
         self.run()
 
     def run(self):
