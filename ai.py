@@ -18,8 +18,14 @@ class AI():
         else:
             pieces = self.game.black_pieces
             enemy_pieces = self.game.white_pieces
+
         best_move = float('-inf')
         final_move = None
+
+        for piece in pieces:
+            piece.move_list()
+
+
 
 
 

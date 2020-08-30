@@ -105,7 +105,7 @@ class Player():
                     self.selected_piece = piece
         # generates move list
         if self.selected_piece != None:
-            self.selected_piece.move_list()
+            self.selected_piece.move_list(self.selected_piece.groups)
             self.selected_piece.fix_check() # removes moves that do not block / prevent a check
 
     def mouse_up(self, current):
