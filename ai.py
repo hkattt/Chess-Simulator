@@ -1,6 +1,7 @@
 # AI CLASS
 
 import pygame as pg
+import copy
 
 class AI():
     def __init__(self, colour, game):
@@ -24,6 +25,16 @@ class AI():
 
         for piece in pieces:
             piece.move_list()
+            for move in piece.viable:
+                board_copy = self.new_board(piece, move)
+                
+
+    def new_board(self, piece, move):
+        board_copy = copy.deepcopy(self.game.board)
+        board_copy[piece.y][piece.x] = "."
+        board_copy[move[1]][move[0]] = piece.colour + piece.symbol
+        return board_copy
+
 
 
 
