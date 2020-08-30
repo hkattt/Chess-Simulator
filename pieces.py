@@ -94,10 +94,10 @@ class King(Piece):
         self.checked = False
         self.king = self
         
-    def move_list(self, groups):
+    def move_list(self):
         """ Generates a list contraining all of the king's viable moves """
         self.viable = []
-        occupied = self.occupied(groups[1])
+        occupied = self.occupied(self.groups[1])
         # generates potential moves
         self.viable += [(self.x + 1, self.y), (self.x, self.y + 1), (self.x - 1, self.y), (self.x, self.y - 1), 
             (self.x + 1, self.y + 1), (self.x - 1, self.y - 1), (self.x + 1, self.y - 1), (self.x - 1, self.y + 1)]
@@ -114,14 +114,14 @@ class King(Piece):
             # iterates over all of the black pieces and adds their possible
             # moves to all_moves
             for piece in self.game.black_pieces:
-                piece.move_list(piece.groups)
+                piece.move_list()
                 all_moves += piece.viable
         # black
         else:
             # iterates over all of the white pieces and adds their possible
             # moves to all_moves
             for piece in self.game.white_pieces:
-                piece.move_list(piece.groups)
+                piece.move_list()
                 all_moves += piece.viable
         # if the kings' current position is the same as a potential move
         # then he is in check
@@ -139,7 +139,7 @@ class King(Piece):
             # iterates over all friendly (white) pieces and adds their potential
             # moves to all_moves
             for piece in self.game.white_pieces:
-                piece.move_list(piece.groups)
+                piece.move_list()
                 piece.fix_check()
                 moves += piece.viable
         # black
@@ -147,7 +147,7 @@ class King(Piece):
             # iterates over all friendly (black) pieces and adds their potential
             # moves to all_moves
             for piece in self.game.black_pieces:
-                piece.move_list(piece.groups)
+                piece.move_list()
                 piece.fix_check()
                 moves += piece.viable
         # if there are no mores in all_moves (i.e. length of the list = 0) the king
@@ -176,10 +176,10 @@ class Queen(Piece):
         # access to the friendly king
         self.king = self.friendly_king()
 
-    def move_list(self, groups):
+    def move_list(self):
         """ Generates a list containing all of the queen's viable moves """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(groups[0]), self.occupied(groups[1])
+        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
         rook_directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # rooks possible moving directions (i.e. right, left, up, down)
         move_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)] # possible moving directions (i.e. up right, down right, up left, down left)
         moves = []
@@ -232,10 +232,10 @@ class Rook(Piece):
         # access to the friendly king
         self.king = self.friendly_king()
 
-    def move_list(self, groups):
+    def move_list(self):
         """ Generates a list containing all of the rook's viable moves """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(groups[0]), self.occupied(groups[1])
+        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
         move_directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # possible moving directions (i.e. right, left, up, down)
         moves = []
         # iterates over each direction
@@ -275,12 +275,12 @@ class Bishop(Piece):
         # access to the friendly king
         self.king = self.friendly_king()
 
-    def move_list(self, groups):
+    def move_list(self):
         """ Generates a list containing all of the bishop's viable moves. 
             This function uses logic from the following source:
              https://codereview.stackexchange.com/questions/94465/enumerating-moves-for-a-chess-piece 11/8 """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(groups[0]), self.occupied(groups[1])
+        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
         move_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)] # possible moving directions (i.e. up right, down right, up left, down left)
         moves = []
         # iterates over each direction
@@ -320,10 +320,10 @@ class Knight(Piece):
         # access to the friendly king
         self.king = self.friendly_king()
 
-    def move_list(self, groups):
+    def move_list(self):
         """ Generates a list containing all of the knight's viable moves """
         self.viable = []
-        occupied = self.occupied(groups[1])
+        occupied = self.occupied(self.groups[1])
         # adds potential moves
         self.viable += [(self.x + 1, self.y + 2), (self.x + 2, self.y + 1), (self.x + 2, self.y - 1), (self.x + 1, self.y - 2),
                          (self.x - 1, self.y - 2), (self.x - 2, self.y - 1), (self.x - 2, self.y + 1), (self.x - 1, self.y + 2)]
@@ -352,10 +352,10 @@ class Pawn(Piece):
         # access to the friendly king
         self.king = self.friendly_king()
 
-    def move_list(self, groups):
+    def move_list(self):
         """ Generates a list containing all of the pawn's viable moves """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(groups[0]), self.occupied(groups[1])
+        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
         # white pawn
         if self.colour == "W":
             self.viable += [(self.x, self.y - 1)]
