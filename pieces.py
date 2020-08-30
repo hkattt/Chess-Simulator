@@ -7,7 +7,7 @@ import pygame as pg
 from settings import *
 
 class Piece(pg.sprite.Sprite):
-    def __init__(self, x, y, colour, game):
+    def __init__(self, x, y, colour, game, groups):
         self.x = x
         self.y = y
         self.original_x = x
@@ -17,10 +17,7 @@ class Piece(pg.sprite.Sprite):
         # other pieces on the board
         self.game = game
         # pieces sprite groups
-        if self.colour == "B":
-            self.groups = game.all_sprites, game.black_pieces
-        else:
-            self.groups = game.all_sprites, game.white_pieces
+        self.groups = groups
         self.viable = []
         self.first = True # used to determine whether a pawn can jump two pieces
         # initiates the sprite class
@@ -79,8 +76,8 @@ class Piece(pg.sprite.Sprite):
                 return king
 
 class King(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, game, groups):
+        super().__init__(x, y, colour, game, groups)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -163,8 +160,8 @@ class King(Piece):
         else:
             self.image = pg.image.load("whiteKing.png")
 class Queen(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, game, groups):
+        super().__init__(x, y, colour, game, groups)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -219,8 +216,8 @@ class Queen(Piece):
         else:
             self.image = pg.image.load("whiteQueen.png")
 class Rook(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, game, groups):
+        super().__init__(x, y, colour, game, groups)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -262,8 +259,8 @@ class Rook(Piece):
         else:
             self.image = pg.image.load("whiteRook.png")
 class Bishop(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, game, groups):
+        super().__init__(x, y, colour, game, groups)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -307,8 +304,8 @@ class Bishop(Piece):
         else:
             self.image = pg.image.load("whiteBishop.png")
 class Knight(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, game, groups):
+        super().__init__(x, y, colour, game, groups)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -339,8 +336,8 @@ class Knight(Piece):
         else:
             self.image = pg.image.load("whiteKnight.png")
 class Pawn(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, game, groups):
+        super().__init__(x, y, colour, game, groups)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))

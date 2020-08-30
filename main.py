@@ -28,18 +28,20 @@ class Game():
         self.white = Player("W", self)
         self.black = Player("B", self)
         self.teams = [self.white, self.black]
-        self.ai = AI("B", self)
+        self.ai = AI("B", 2, self)
 
 
         # creates sprite groups
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
         self.white_pieces = pg.sprite.Group()
+        self.colours = [self.black_pieces, self.white_pieces]
         self.kings = pg.sprite.Group()
+        colours = ["B", "W"]
 
         # kings are created before all of the other pieces
-        King(4, 0, "B", self)
-        King(4, 7, "W", self)
+        King(4, 0, "B", self, (self.all_sprites, self.black_pieces))
+        King(4, 7, "W", self, (self.all_sprites, self.white_pieces))
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
         for row, tiles in enumerate(self.board):
@@ -48,19 +50,19 @@ class Game():
                 if tile != ".":
                     # tile colour
                     if tile[0] == "B":
-                        colour = "B"
+                        index = 0
                     else:
-                        colour = "W"
+                        index = 1
                     if tile[1:] == "Q":
-                        Queen(column, row, colour, self)
+                        Queen(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
                     elif tile[1:] == "R":
-                        Rook(column, row, colour, self)
+                        Rook(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
                     elif tile[1:] == "B":
-                        Bishop(column, row, colour, self)
+                        Bishop(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
                     elif tile[1:] == "Kn":
-                        Knight(column, row, colour, self)
+                        Knight(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
                     elif tile[1:] == "P":
-                        Pawn(column, row, colour, self)
+                        Pawn(column, row, colours[index], self, (self.all_sprites, self.colours[index]))
         self.ai.move()
         self.run()
 
