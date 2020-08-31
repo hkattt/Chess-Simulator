@@ -26,8 +26,10 @@ class AI():
             piece.fix_check()
             for move in piece.viable:
                 board_copy = self.new_board(piece, move)
+                for row in board_copy:
+                    print(row)
+                print("")
                 value = self.minimax(self.depth - 1, board_copy, False)
-                print(value)
                 return
 
     def minimax(self, depth, board, isMaximizing):
@@ -35,6 +37,10 @@ class AI():
             return -self.board_evaluation(board)
 
         self.generate_temp(board)
+
+        for row in board:
+            print(row)
+        print("")
         
         if isMaximizing:
             best = -9999
@@ -43,7 +49,9 @@ class AI():
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(piece, move)
+                    return
                     self.minimax(self.depth - 1, board_copy, False)
+
         else:
             best = 9999
             for piece in self.temp_blacks:
@@ -51,6 +59,9 @@ class AI():
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(piece, move)
+                    for row in board_copy:
+                        print(row)
+                    return
                     self.minimax(self.depth - 1, board_copy, True)
 
 
