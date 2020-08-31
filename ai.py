@@ -3,9 +3,6 @@
 import pygame as pg
 import copy
 
-# importing files
-from pieces import *
-
 class AI():
     def __init__(self, colour, depth, game):
         self.colour = colour
@@ -49,7 +46,8 @@ class AI():
             """
             for piece in self.temp_all_sprites:
                 piece.move_list()
-                return""""
+                return"""
+            pass
 
 
     def new_board(self, piece, move):

@@ -28,18 +28,17 @@ class Game():
         self.white = Player("W", self)
         self.black = Player("B", self)
         self.teams = [self.white, self.black]
-        self.ai = AI("B", 2, self)
-
 
         # creates sprite groups
         self.all_sprites = pg.sprite.Group()
         self.black_pieces = pg.sprite.Group()
         self.white_pieces = pg.sprite.Group()
         self.kings = pg.sprite.Group()
+        self.groups = (self.all_sprites, self.black_pieces, self.white_pieces)
 
         # kings are created before all of the other pieces
-        King(4, 0, "B", self)
-        King(4, 7, "W", self)
+        King(4, 0, "B", self.groups, self.kings)
+        King(4, 7, "W", self.groups, self.kings)
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
         for row, tiles in enumerate(self.board):
@@ -52,16 +51,15 @@ class Game():
                     else:
                         colour = "W"
                     if tile[1:] == "Q":
-                        Queen(column, row, colour, self)
+                        Queen(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "R":
-                        Rook(column, row, colour, self)
+                        Rook(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "B":
-                        Bishop(column, row, colour, self)
+                        Bishop(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "Kn":
-                        Knight(column, row, colour, self)
+                        Knight(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "P":
-                        Pawn(column, row, colour, self)
-        self.ai.move()
+                        Pawn(column, row, colour, self.groups, self.kings)
         self.run()
 
     def run(self):
@@ -148,7 +146,6 @@ class Game():
             self.screen.blit(self.white.selected_piece.image, self.white.selected_piece)
 
         pg.display.update() # updates the window
-
     def end_screen(self):
         """ Screen after a player has been checkmated """
         for king in self.kings:

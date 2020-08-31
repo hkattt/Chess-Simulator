@@ -7,24 +7,31 @@ import pygame as pg
 from settings import *
 
 class Piece(pg.sprite.Sprite):
-    def __init__(self, x, y, colour, game):
+    def __init__(self, x, y, colour, groups, kings):
         self.x = x
         self.y = y
         self.original_x = x
         self.original_y = y
         self.colour = colour
-        # copy of the game class, allowing the pieces to access information about 
-        # other pieces on the board
-        self.game = game
+        # the group variable contains four groups
+        #   1. all_sprites (i.e. all pieces)
+        #   2. black pieces
+        #   3. white pieces
+        #   4. kings
+        self.groups = groups
         # pieces sprite groups
+        self.all_sprites = self.groups[0]
         if self.colour == "B":
-            self.groups = game.all_sprites, game.black_pieces
+            self.friendly_pieces = self.groups[1]
+            self.enemy_pieces = self.groups[2]
         else:
-            self.groups = game.all_sprites, game.white_pieces
+            self.friendly_pieces = self.groups[2]
+            self.enemy_pieces = self.groups[1]
+        self.kings = kings
         self.viable = []
         self.first = True # used to determine whether a pawn can jump two pieces
         # initiates the sprite class
-        pg.sprite.Sprite.__init__(self, self.groups)
+        pg.sprite.Sprite.__init__(self, (self.all_sprites, self.friendly_pieces))
 
     def occupied(self, group):
         """ Returns a list containing the coordinates of all the tiles that are
@@ -44,8 +51,8 @@ class Piece(pg.sprite.Sprite):
             # if the current move does not result in the king being placed in check it is viable
             if self.king.in_check() != True:
                 new_viable.append(move)
-            # iterates over all of the pieces
-            for piece in self.game.all_sprites:
+            # iterates over all of the enemy pieces
+            for piece in self.enemy_pieces:
                 # checks if the cooridnates of the current piece are the same as the current move
                 # i.e. is the move taking the current piece
                 if piece.x == move[0] and piece.y == move[1] and piece != self:
@@ -59,13 +66,10 @@ class Piece(pg.sprite.Sprite):
                         if move not in new_viable:
                             new_viable.append(move)
                     # adding the piece back into its groups
-                    piece.add(piece.game.all_sprites)
-                    if piece.colour == "W":
-                        piece.add(self.game.white_pieces)
-                    else:
-                        piece.add(self.game.black_pieces)
+                    piece.add(piece.all_sprites)
+                    piece.add(piece.friendly_pieces)
                     # initiates the sprite class
-                    pg.sprite.Sprite.__init__(piece, piece.groups)
+                    pg.sprite.Sprite.__init__(piece, (piece.all_sprites, piece.friendly_pieces))
                     break
         # sets the pieces position back to the original position
         self.x, self.y = original_x, original_y
@@ -74,13 +78,13 @@ class Piece(pg.sprite.Sprite):
     def friendly_king(self):
         """ Returns the friendly king object
             This serves the purpose of giving each piece access to its king """
-        for king in self.game.kings:
+        for king in self.kings:
             if king.colour == self.colour:
                 return king
 
 class King(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, groups, kings):
+        super().__init__(x, y, colour, groups, kings)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -90,14 +94,14 @@ class King(Piece):
         self.rect.center = ((self.x * TILE_SIZE) + (TILE_SIZE / 2), (self.y * TILE_SIZE) + (TILE_SIZE / 2))
         self.symbol = "K"
         # adds the king into the kings group
-        self.game.kings.add(self)
+        self.kings.add(self)
         self.checked = False
         self.king = self
         
     def move_list(self):
         """ Generates a list contraining all of the king's viable moves """
         self.viable = []
-        occupied = self.occupied(self.groups[1])
+        occupied = self.occupied(self.friendly_pieces)
         # generates potential moves
         self.viable += [(self.x + 1, self.y), (self.x, self.y + 1), (self.x - 1, self.y), (self.x, self.y - 1), 
             (self.x + 1, self.y + 1), (self.x - 1, self.y - 1), (self.x + 1, self.y - 1), (self.x - 1, self.y + 1)]
@@ -109,24 +113,15 @@ class King(Piece):
     def in_check(self):
         """ Checks to see if the king is in check """
         all_moves = [] # list containing all possible moves
-        # black
-        if self.colour == "W": 
-            # iterates over all of the black pieces and adds their possible
-            # moves to all_moves
-            for piece in self.game.black_pieces:
-                piece.move_list()
-                all_moves += piece.viable
-        # black
-        else:
-            # iterates over all of the white pieces and adds their possible
-            # moves to all_moves
-            for piece in self.game.white_pieces:
-                piece.move_list()
-                all_moves += piece.viable
+        # iterates over all of the enemy pieces and adds their possible
+        # moves to all_moves
+        for piece in self.enemy_pieces:
+            piece.move_list()
+            all_moves += piece.viable
         # if the kings' current position is the same as a potential move
         # then he is in check
         if (self.x, self.y) in all_moves:
-            self.checked = True
+            self.checked = True # this flag only exists for the check tiles drawing function (not having it makes it destroy the original viable list
             return True
         self.checked = False
         return False
@@ -134,22 +129,12 @@ class King(Piece):
     def check_mate(self):
         """ Checks if the king has been placed in check mate """
         moves = [] # list containing all possible moves
-        # white 
-        if self.colour == "W":
-            # iterates over all friendly (white) pieces and adds their potential
-            # moves to all_moves
-            for piece in self.game.white_pieces:
-                piece.move_list()
-                piece.fix_check()
-                moves += piece.viable
-        # black
-        else:
-            # iterates over all friendly (black) pieces and adds their potential
-            # moves to all_moves
-            for piece in self.game.black_pieces:
-                piece.move_list()
-                piece.fix_check()
-                moves += piece.viable
+        # iterates over all friendly pieces and adds their potential
+        # moves to all_moves
+        for piece in self.friendly_pieces:
+            piece.move_list()
+            piece.fix_check()
+            moves += piece.viable
         # if there are no mores in all_moves (i.e. length of the list = 0) the king
         # has been check mated
         if len(moves) == 0:
@@ -163,8 +148,8 @@ class King(Piece):
         else:
             self.image = pg.image.load("whiteKing.png")
 class Queen(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, groups, kings):
+        super().__init__(x, y, colour, groups, kings)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -179,7 +164,7 @@ class Queen(Piece):
     def move_list(self):
         """ Generates a list containing all of the queen's viable moves """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
+        occupied, friendly_occupied = self.occupied(self.all_sprites), self.occupied(self.friendly_pieces)
         rook_directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # rooks possible moving directions (i.e. right, left, up, down)
         move_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)] # possible moving directions (i.e. up right, down right, up left, down left)
         moves = []
@@ -219,8 +204,8 @@ class Queen(Piece):
         else:
             self.image = pg.image.load("whiteQueen.png")
 class Rook(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, groups, kings):
+        super().__init__(x, y, colour, groups, kings)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -235,7 +220,7 @@ class Rook(Piece):
     def move_list(self):
         """ Generates a list containing all of the rook's viable moves """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
+        occupied, friendly_occupied = self.occupied(self.all_sprites), self.occupied(self.friendly_pieces)
         move_directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # possible moving directions (i.e. right, left, up, down)
         moves = []
         # iterates over each direction
@@ -262,8 +247,8 @@ class Rook(Piece):
         else:
             self.image = pg.image.load("whiteRook.png")
 class Bishop(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, groups, kings):
+        super().__init__(x, y, colour, groups, kings)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -280,7 +265,7 @@ class Bishop(Piece):
             This function uses logic from the following source:
              https://codereview.stackexchange.com/questions/94465/enumerating-moves-for-a-chess-piece 11/8 """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
+        occupied, friendly_occupied = self.occupied(self.all_sprites), self.occupied(self.friendly_pieces)
         move_directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)] # possible moving directions (i.e. up right, down right, up left, down left)
         moves = []
         # iterates over each direction
@@ -307,8 +292,8 @@ class Bishop(Piece):
         else:
             self.image = pg.image.load("whiteBishop.png")
 class Knight(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, groups, kings):
+        super().__init__(x, y, colour, groups, kings)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -323,7 +308,7 @@ class Knight(Piece):
     def move_list(self):
         """ Generates a list containing all of the knight's viable moves """
         self.viable = []
-        occupied = self.occupied(self.groups[1])
+        occupied = self.occupied(self.friendly_pieces)
         # adds potential moves
         self.viable += [(self.x + 1, self.y + 2), (self.x + 2, self.y + 1), (self.x + 2, self.y - 1), (self.x + 1, self.y - 2),
                          (self.x - 1, self.y - 2), (self.x - 2, self.y - 1), (self.x - 2, self.y + 1), (self.x - 1, self.y + 2)]
@@ -339,8 +324,8 @@ class Knight(Piece):
         else:
             self.image = pg.image.load("whiteKnight.png")
 class Pawn(Piece):
-    def __init__(self, x, y, colour, game):
-        super().__init__(x, y, colour, game)
+    def __init__(self, x, y, colour, groups, kings):
+        super().__init__(x, y, colour, groups, kings)
         self.load_image()
         # scales the image to the desired size
         self.image = pg.transform.scale(self.image, (64, 64))
@@ -355,7 +340,7 @@ class Pawn(Piece):
     def move_list(self):
         """ Generates a list containing all of the pawn's viable moves """
         self.viable = []
-        occupied, friendly_occupied = self.occupied(self.game.all_sprites), self.occupied(self.groups[1])
+        occupied, friendly_occupied = self.occupied(self.all_sprites), self.occupied(self.friendly_pieces)
         # white pawn
         if self.colour == "W":
             self.viable += [(self.x, self.y - 1)]
@@ -366,7 +351,7 @@ class Pawn(Piece):
                 self.viable += [(self.x, self.y - 2)]
 
             # checks if the pawn can take any black pieces
-            for piece in self.game.black_pieces:
+            for piece in self.enemy_pieces:
                 # top right
                 if piece.x == self.x + 1 and piece.y == self.y - 1:
                     self.viable += [(piece.x, piece.y)]
@@ -384,7 +369,7 @@ class Pawn(Piece):
                 self.viable += [(self.x, self.y + 2)]
 
             # checks if the pawn can take any black pieces
-            for piece in self.game.white_pieces:
+            for piece in self.enemy_pieces:
                 # bottom right
                 if piece.x == self.x + 1 and piece.y == self.y + 1:
                     self.viable += [(piece.x, piece.y)]

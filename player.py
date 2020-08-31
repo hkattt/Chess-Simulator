@@ -32,7 +32,7 @@ class Player():
             if self.selected_piece == None: 
                 self.mousedown = True
                 # checks if a piece was clicked
-                self.clicked(position) 
+                self.clicked(position)
         # mouse button is not pressed
         else:
             self.mousedown = False
