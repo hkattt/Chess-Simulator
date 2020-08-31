@@ -6,7 +6,6 @@ import random
 import time
 
 # imports other game files
-from pieces import *
 from player import *
 from ai import *
 from board import *
@@ -36,6 +35,9 @@ class Game():
         self.kings = pg.sprite.Group()
         self.groups = (self.all_sprites, self.black_pieces, self.white_pieces)
 
+        ai = AI("B", 1, self)
+
+
         # kings are created before all of the other pieces
         King(4, 0, "B", self.groups, self.kings)
         King(4, 7, "W", self.groups, self.kings)
@@ -60,6 +62,7 @@ class Game():
                         Knight(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "P":
                         Pawn(column, row, colour, self.groups, self.kings)
+        ai.move()
         self.run()
 
     def run(self):
