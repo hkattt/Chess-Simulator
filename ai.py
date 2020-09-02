@@ -21,34 +21,48 @@ class AI():
         best_move = float('-inf')
         final_move = None
 
+        # MINIMAX ROOT 
+        # iterates over all of the friendly pieces
         for piece in self.friendly_pieces:
+            # generates the move list for the current piece
             piece.move_list()
             piece.fix_check()
+            # iterates over all of the viable moves
             for move in piece.viable:
+                # creates a copy of the current board with the current move played
+                # i.e. makes a board with the current piece moved to the current move
                 board_copy = self.new_board(self.game.board, piece, move)
+                # runs minimax on the copied board
                 value = self.minimax(self.depth - 1, board_copy, False)
+                # if the value of the current move is greater than the best move it becomes
+                # the best move
                 if value > best_move:
                     best_move = value
+                    # saving the best move
                     final_move = (piece, move)
         print(value, final_move)
 
     def minimax(self, depth, board, isMaximizing):
+        # if the depth is equal to 0, minimax retruns the 'value' of the board
+        # the boards value is determined by adding up the net sum of all of the pieces
         if depth == 0:
             return -self.board_evaluation(board)
 
+        # creates temporary pieces
         self.generate_temp(board)
 
+        # computers turn
         if isMaximizing:
-            best = -9999
+            best = float('-inf')
             for piece in self.temp_blacks:
                 piece.move_list()
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(board, piece, move)
                     self.minimax(self.depth - 1, board_copy, False)
-
+        # users turn
         else:
-            best = 9999
+            best = float('inf')
             for piece in self.temp_whites:
                 piece.move_list()
                 piece.fix_check()
