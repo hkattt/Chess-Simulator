@@ -25,12 +25,12 @@ class AI():
             piece.move_list()
             piece.fix_check()
             for move in piece.viable:
-                board_copy = self.new_board(piece, move)
-                for row in board_copy:
-                    print(row)
-                print("")
+                board_copy = self.new_board(self.game.board, piece, move)
                 value = self.minimax(self.depth - 1, board_copy, False)
-                return
+                if value > best_move:
+                    best_move = value
+                    final_move = (piece, move)
+        print(value, final_move)
 
     def minimax(self, depth, board, isMaximizing):
         if depth == 0:
@@ -38,35 +38,27 @@ class AI():
 
         self.generate_temp(board)
 
-        for row in board:
-            print(row)
-        print("")
-        
         if isMaximizing:
             best = -9999
-            for piece in self.temp_whites:
-                piece.move_list()
-                piece.fix_check()
-                for move in piece.viable:
-                    board_copy = self.new_board(piece, move)
-                    return
-                    self.minimax(self.depth - 1, board_copy, False)
-
-        else:
-            best = 9999
             for piece in self.temp_blacks:
                 piece.move_list()
                 piece.fix_check()
                 for move in piece.viable:
-                    board_copy = self.new_board(piece, move)
-                    for row in board_copy:
-                        print(row)
-                    return
+                    board_copy = self.new_board(board, piece, move)
+                    self.minimax(self.depth - 1, board_copy, False)
+
+        else:
+            best = 9999
+            for piece in self.temp_whites:
+                piece.move_list()
+                piece.fix_check()
+                for move in piece.viable:
+                    board_copy = self.new_board(board, piece, move)
                     self.minimax(self.depth - 1, board_copy, True)
 
 
-    def new_board(self, piece, move):
-        board_copy = copy.deepcopy(self.game.board)
+    def new_board(self, board, piece, move):
+        board_copy = copy.deepcopy(board)
         board_copy[piece.y][piece.x] = "."
         board_copy[move[1]][move[0]] = piece.colour + piece.symbol
         return board_copy
