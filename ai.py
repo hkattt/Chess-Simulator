@@ -36,7 +36,8 @@ class AI():
         self.turn, self.game.white.turn = False, True
 
     def minimax_seed(self, depth, board, isMaximizing):
-        """ this function uses logic from the following sources:
+        """ start of the minimax recursive loop - used to evaluate each move 
+            this function uses logic from the following sources:
             https://github.com/AnthonyASanchez/PythonChessAi
             https://github.com/devinalvaro/yachess/tree/master/src """
         best_move = float('-inf')
@@ -61,25 +62,32 @@ class AI():
         return (final_move[0], final_move[1])
 
     def minimax(self, depth, board, alpha, beta, isMaximizing):
-        """ this function uses logic from the following source:
+        """ minimax algorithm with alpha-beta pruning 
+            this function uses logic from the following source:
             https://github.com/AnthonyASanchez/PythonChessAi """
         # if the depth is equal to 0, minimax retruns the 'value' of the board
         # the boards value is determined by adding up the net sum of all of the pieces
 
+        # base case
         if depth == 0:
             return self.board_evaluation(board)
 
         # creates temporary pieces
         self.generate_temp(board)
-
+        self.game.events() # allows the user to quit
         # computers turn
         if isMaximizing:
-            best = float('-inf')
+            best = float('-inf') # place holder
             for piece in self.temp_blacks:
+                # generates the current pieces' moves
                 piece.move_list()
                 piece.fix_check()
+                # iterates over the current pieces' moves 
                 for move in piece.viable:
+                    # creates a copy of the current board with the current move played
+                    # i.e. makes a board with the current piece moved to the current move
                     board_copy = self.new_board(board, piece, move)
+                    # runs minimax with the current board
                     best = max(best, self.minimax(depth - 1, board_copy, alpha, beta, False))
                     alpha = max(alpha, best)
                     if beta <= alpha:
@@ -90,10 +98,15 @@ class AI():
         else:
             best = float('inf')
             for piece in self.temp_whites:
+                # generates the current pieces' moves
                 piece.move_list()
                 piece.fix_check()
+                # iterates over the current pieces' moves
                 for move in piece.viable:
+                    # creates a copy of the current board with the current move played
+                    # i.e. makes a board with the current piece moved to the current move
                     board_copy = self.new_board(board, piece, move)
+                    # runs minimax with the current board
                     best = min(best, self.minimax(depth - 1, board_copy, alpha, beta, True))
                     beta = min(beta, best)
                     if beta <= alpha:
@@ -101,34 +114,50 @@ class AI():
             return best
 
     def new_board(self, board, piece, move):
-        board_copy = copy.deepcopy(board)
+        """ Generates a new board (array) with the move played """
+        board_copy = copy.deepcopy(board) # deep copy of the current board (new place in memory)
         board_copy[piece.y][piece.x] = "."
         board_copy[move[1]][move[0]] = piece.colour + piece.symbol
         return board_copy
 
     def update_board(self, piece):
+        """ Updates the games' board to reflect new move """
         self.game.board[piece.y][piece.x] = piece.colour + piece.symbol
         self.game.board[piece.original_y][piece.original_x] = "."
 
     def board_evaluation(self, board):
-        self.generate_temp(board)
+        """ Returns a numerical evaluation (number) of the board """
+        self.generate_temp(board) # generates temperory pieces
         value = 0
+        # iterates over all of the pieces
         for piece in self.temp_all:
+            # the value is determined by the pieces on the board (i.e. queen, rook, bishop etc are worth different amounts)
+            # and the position of those pieces (certain pieces are better in certain positions)
+
+            # friendly pieces add value
             if piece.colour == self.colour:
                 value += (self.values[piece.symbol] + self.tile_values[piece.symbol][piece.y][piece.x])
+            # enemy pieces take value
             else:
                 value += (self.values[piece.symbol] + self.tile_values[piece.symbol][piece.y][piece.x]) * -1
-
+        # CHECK / CHECK MATE changes
         for king in self.kings:
             if king.colour == self.colour:
+                # friendly king is in check
                 if king.in_check():
+                    # check mate
                     if king.check_mate():
+                        # a check mate loses the game, as such this move should never be chosen (terrible value)
                         value -= 100000
                     else:
+                        # a check is not ideal, however, it is not game changing
                         value -= 50       
         return value
 
     def generate_temp(self, board):
+        """ Generates temporary place holder pieces
+            these are used to generate move lists in the minimax function """
+        # sprite groups
         self.temp_all = pg.sprite.Group()
         self.temp_whites = pg.sprite.Group()
         self.temp_blacks = pg.sprite.Group()
@@ -149,6 +178,7 @@ class AI():
                     else:
                         colour = "W"
                     if tile[1:] == "K":
+                        # updates the kings' position to its actual position
                         for king in self.kings:
                             if king.colour == colour:
                                 king.x, king.y = column, row
