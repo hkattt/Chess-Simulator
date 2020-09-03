@@ -1,9 +1,12 @@
 # AI CLASS
 
+# importing required modules
 import pygame as pg
 import copy
 
+# importing required files
 from pieces import *
+from move_tiles import *
 
 class AI():
     def __init__(self, colour, depth, game):
@@ -13,6 +16,7 @@ class AI():
         self.depth = depth
         self.turn = False
         self.values = {"P" : 10, "B" : 30, "Kn" : 30, "R" : 50, "Q" : 90, "K" : 1000}
+        self.tile_values = {"P" : PAWN_TILES, "B" : BISHOP_TILES, "Kn" : KNIGHT_TILES, "R" : ROOK_TILES, "Q" : QUEEN_TILES, "K" : KING_TILES}
 
     def move(self):
         selected_piece, move = self.minimax_seed(self.depth, self.game.board, True) # get the 'best' move from the minimax algorithm
@@ -32,6 +36,9 @@ class AI():
         self.turn, self.game.white.turn = False, True
 
     def minimax_seed(self, depth, board, isMaximizing):
+        """ this function uses logic from the following sources:
+            https://github.com/AnthonyASanchez/PythonChessAi
+            https://github.com/devinalvaro/yachess/tree/master/src """
         best_move = float('-inf')
         final_move = None
         # MINIMAX ROOT 
@@ -46,16 +53,19 @@ class AI():
                 # i.e. makes a board with the current piece moved to the current move
                 board_copy = self.new_board(self.game.board, piece, move)
                 # runs minimax on the copied board
-                value = max(best_move, self.minimax(self.depth - 1, board_copy, False))
+                value = max(best_move, self.minimax(self.depth - 1, board_copy, -10000, 10000, False))
                 if value > best_move:
                     best_move = value
                     # saving the best move
                     final_move = (piece, move)
         return (final_move[0], final_move[1])
 
-    def minimax(self, depth, board, isMaximizing):
+    def minimax(self, depth, board, alpha, beta, isMaximizing):
+        """ this function uses logic from the following source:
+            https://github.com/AnthonyASanchez/PythonChessAi """
         # if the depth is equal to 0, minimax retruns the 'value' of the board
         # the boards value is determined by adding up the net sum of all of the pieces
+
         if depth == 0:
             return self.board_evaluation(board)
 
@@ -70,7 +80,10 @@ class AI():
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(board, piece, move)
-                    best = max(best, self.minimax(depth - 1, board_copy, False))
+                    best = max(best, self.minimax(depth - 1, board_copy, alpha, beta, False))
+                    alpha = max(alpha, best)
+                    if beta <= alpha:
+                        return best
             return best
 
         # users turn
@@ -81,7 +94,10 @@ class AI():
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(board, piece, move)
-                    best = min(best, self.minimax(depth - 1, board_copy, True))
+                    best = min(best, self.minimax(depth - 1, board_copy, alpha, beta, True))
+                    beta = min(beta, best)
+                    if beta <= alpha:
+                        return best
             return best
 
     def new_board(self, board, piece, move):
@@ -95,14 +111,21 @@ class AI():
         self.game.board[piece.original_y][piece.original_x] = "."
 
     def board_evaluation(self, board):
+        self.generate_temp(board)
         value = 0
-        for row in board:
-            for piece in row:
-                if piece != ".":
-                    if piece[0] == self.colour:
-                        value += self.values[piece[1:]]
+        for piece in self.temp_all:
+            if piece.colour == self.colour:
+                value += (self.values[piece.symbol] + self.tile_values[piece.symbol][piece.y][piece.x])
+            else:
+                value += (self.values[piece.symbol] + self.tile_values[piece.symbol][piece.y][piece.x]) * -1
+
+        for king in self.kings:
+            if king.colour == self.colour:
+                if king.in_check():
+                    if king.check_mate():
+                        value -= 100000
                     else:
-                        value += self.values[piece[1:]] * -1
+                        value -= 50       
         return value
 
     def generate_temp(self, board):
@@ -111,8 +134,6 @@ class AI():
         self.temp_blacks = pg.sprite.Group()
         self.kings = pg.sprite.Group()
         self.groups = (self.temp_all, self.temp_blacks, self.temp_whites)
-
-
         # kings are created before all of the other pieces
         King(4, 0, "B", self.groups, self.kings)
         King(4, 7, "W", self.groups, self.kings)
@@ -127,6 +148,10 @@ class AI():
                         colour = "B"
                     else:
                         colour = "W"
+                    if tile[1:] == "K":
+                        for king in self.kings:
+                            if king.colour == colour:
+                                king.x, king.y = column, row
                     if tile[1:] == "Q":
                         Queen(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "R":
