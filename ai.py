@@ -9,18 +9,29 @@ class AI():
     def __init__(self, colour, depth, game):
         self.colour = colour
         self.game = game
-        if self.colour == "W":
-            self.turn = True
-            self.friendly_pieces = self.game.white_pieces
-        else:
-            self.friendly_pieces = self.game.black_pieces
+        self.friendly_pieces, self.enemy_pieces = self.game.black_pieces, self.game.white_pieces
         self.depth = depth
+        self.turn = False
         self.values = {"P" : 10, "B" : 30, "Kn" : 30, "R" : 50, "Q" : 90, "K" : 1000}
 
     def move(self):
+        selected_piece, move = self.minimax_seed(self.depth, self.game.board, True) # get the 'best' move from the minimax algorithm
+        # updates the pieces position and rect (to the move)
+        selected_piece.x, selected_piece.y = move[0], move[1] 
+        selected_piece.rect.center = ((selected_piece.x * TILE_SIZE) + TILE_SIZE // 2),  ((selected_piece.y * TILE_SIZE) + TILE_SIZE // 2)
+        self.take_piece(move[0], move[1]) # take a piece with the move
+        
+        # checks if a king has been check mated
+        for king in self.game.kings:
+            if king.in_check():
+                if king.check_mate():
+                    self.game.playing = False
+                    self.game.running = False
+        self.turn, self.game.white.turn = False, True
+
+    def minimax_seed(self, depth, board, isMaximizing):
         best_move = float('-inf')
         final_move = None
-
         # MINIMAX ROOT 
         # iterates over all of the friendly pieces
         for piece in self.friendly_pieces:
@@ -34,17 +45,19 @@ class AI():
                 board_copy = self.new_board(self.game.board, piece, move)
                 # runs minimax on the copied board
                 value = max(best_move, self.minimax(self.depth - 1, board_copy, False))
+                print(value)
                 if value > best_move:
                     best_move = value
                     # saving the best move
                     final_move = (piece, move)
-        print(value, final_move)
+        return (final_move[0], final_move[1])
+
 
     def minimax(self, depth, board, isMaximizing):
         # if the depth is equal to 0, minimax retruns the 'value' of the board
         # the boards value is determined by adding up the net sum of all of the pieces
         if depth == 0:
-            return -self.board_evaluation(board)
+            return self.board_evaluation(board)
 
         # creates temporary pieces
         self.generate_temp(board)
@@ -121,4 +134,13 @@ class AI():
                     elif tile[1:] == "P":
                         Pawn(column, row, colour, self.groups, self.kings)
 
-
+    def take_piece(self, x, y):
+        """ Takes a piece """
+        # iterates over all the pieces
+        # this does not allow the player to take their own pieces as it is not a 
+        # viable move (i.e. it would not reach this point, the logic prevents it) 
+        for piece in self.enemy_pieces:
+            # checks if the current pieces coordinates is equal to the selected piece 
+            # and is not the selected piece itself
+            if piece.x == x and piece.y == y:
+                piece.kill() # removes the piece from groups

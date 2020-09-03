@@ -58,7 +58,7 @@ class Player():
                 # player is not carrying a piece
                 self.selected_piece = None
                 if self.colour == "W":
-                    self.game.black.turn = True
+                    self.game.ai.turn = True
                 else:
                     self.game.white.turn = True
 

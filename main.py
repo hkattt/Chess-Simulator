@@ -25,8 +25,7 @@ class Game():
         """ Creates a new game """
         # creates players
         self.white = Player("W", self)
-        self.black = Player("B", self)
-        self.teams = [self.white, self.black]
+        #self.black = Player("B", self)
 
         # creates sprite groups
         self.all_sprites = pg.sprite.Group()
@@ -35,8 +34,8 @@ class Game():
         self.kings = pg.sprite.Group()
         self.groups = (self.all_sprites, self.black_pieces, self.white_pieces)
 
-        ai = AI("B", 3, self)
-
+        self.ai = AI("B", 2, self)
+        self.teams = [self.white, self.ai]
 
         # kings are created before all of the other pieces
         King(4, 0, "B", self.groups, self.kings)
@@ -62,7 +61,6 @@ class Game():
                         Knight(column, row, colour, self.groups, self.kings)
                     elif tile[1:] == "P":
                         Pawn(column, row, colour, self.groups, self.kings)
-        ai.move()
         self.run()
 
     def run(self):
@@ -76,8 +74,8 @@ class Game():
                 self.paint()
                 if self.white.turn:
                     self.white.move()
-                elif self.black.turn:
-                    self.black.move()
+                elif self.ai.turn:
+                    self.ai.move()
 
     def update(self):
         """ Updates window """
@@ -117,13 +115,11 @@ class Game():
     def viable_colours(self):
         """ Draws the viable tiles onto the board """
         # iterates over both of the teams (W & B)
-        for team in self.teams:
-            if team.turn: # checks which teams turn it is
-                if team.selected_piece != None: # checks if the player is carrying a piece
-                    # draws all the viable moves (i.e. draws circles onto the board)
-                    for move in team.selected_piece.viable:
-                        pg.draw.rect(self.screen, BLACK, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
-                        pg.draw.rect(self.screen, DARK_GREY, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
+        if self.white.selected_piece != None: # checks if the player is carrying a piece
+            # draws all the viable moves (i.e. draws circles onto the board)
+            for move in self.white.selected_piece.viable:
+                pg.draw.rect(self.screen, BLACK, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE), 0)
+                pg.draw.rect(self.screen, DARK_GREY, (move[0] * TILE_SIZE, move[1] * TILE_SIZE, TILE_SIZE - 1, TILE_SIZE - 1), 0)
 
     def check_colours(self):
         """ Draws the checked tiles onto the board """
@@ -143,12 +139,13 @@ class Game():
             self.screen.blit(sprite.image, sprite)
         # the current selected piece (one being moved) is drawn last
         # this gives off the illusion that it is above the other pieces
-        if self.black.selected_piece != None: # black player is moving a piece
-            self.screen.blit(self.black.selected_piece.image, self.black.selected_piece)
-        elif self.white.selected_piece != None: # white player is moving a piece
+        #if self.black.selected_piece != None: # black player is moving a piece
+        #    self.screen.blit(self.black.selected_piece.image, self.black.selected_piece)
+        if self.white.selected_piece != None: # white player is moving a piece
             self.screen.blit(self.white.selected_piece.image, self.white.selected_piece)
 
         pg.display.update() # updates the window
+
     def end_screen(self):
         """ Screen after a player has been checkmated """
         for king in self.kings:
