@@ -33,9 +33,7 @@ class AI():
                 # i.e. makes a board with the current piece moved to the current move
                 board_copy = self.new_board(self.game.board, piece, move)
                 # runs minimax on the copied board
-                value = self.minimax(self.depth - 1, board_copy, False)
-                # if the value of the current move is greater than the best move it becomes
-                # the best move
+                value = max(best_move, self.minimax(self.depth - 1, board_copy, False))
                 if value > best_move:
                     best_move = value
                     # saving the best move
@@ -59,7 +57,9 @@ class AI():
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(board, piece, move)
-                    self.minimax(self.depth - 1, board_copy, False)
+                    best = max(best, self.minimax(depth - 1, board_copy, False))
+            return best
+
         # users turn
         else:
             best = float('inf')
@@ -68,8 +68,8 @@ class AI():
                 piece.fix_check()
                 for move in piece.viable:
                     board_copy = self.new_board(board, piece, move)
-                    self.minimax(self.depth - 1, board_copy, True)
-
+                    best = min(best, self.minimax(depth - 1, board_copy, True))
+            return best
 
     def new_board(self, board, piece, move):
         board_copy = copy.deepcopy(board)

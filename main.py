@@ -35,7 +35,7 @@ class Game():
         self.kings = pg.sprite.Group()
         self.groups = (self.all_sprites, self.black_pieces, self.white_pieces)
 
-        ai = AI("B", 2, self)
+        ai = AI("B", 3, self)
 
 
         # kings are created before all of the other pieces
