@@ -20,6 +20,8 @@ class AI():
         selected_piece.x, selected_piece.y = move[0], move[1] 
         selected_piece.rect.center = ((selected_piece.x * TILE_SIZE) + TILE_SIZE // 2),  ((selected_piece.y * TILE_SIZE) + TILE_SIZE // 2)
         self.take_piece(move[0], move[1]) # take a piece with the move
+        self.update_board(selected_piece)
+        selected_piece.original_x, selected_piece.original_y = selected_piece.x, selected_piece.y
         
         # checks if a king has been check mated
         for king in self.game.kings:
@@ -45,13 +47,11 @@ class AI():
                 board_copy = self.new_board(self.game.board, piece, move)
                 # runs minimax on the copied board
                 value = max(best_move, self.minimax(self.depth - 1, board_copy, False))
-                print(value)
                 if value > best_move:
                     best_move = value
                     # saving the best move
                     final_move = (piece, move)
         return (final_move[0], final_move[1])
-
 
     def minimax(self, depth, board, isMaximizing):
         # if the depth is equal to 0, minimax retruns the 'value' of the board
@@ -89,6 +89,10 @@ class AI():
         board_copy[piece.y][piece.x] = "."
         board_copy[move[1]][move[0]] = piece.colour + piece.symbol
         return board_copy
+
+    def update_board(self, piece):
+        self.game.board[piece.y][piece.x] = piece.colour + piece.symbol
+        self.game.board[piece.original_y][piece.original_x] = "."
 
     def board_evaluation(self, board):
         value = 0
