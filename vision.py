@@ -294,6 +294,8 @@ for i in range (60, 540, 60): #Checking through each individually
                                 failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
                                 failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
 
+                                # seems to work without this section; however, kept it here incase I missed something
+                                """
                                 if failsafe_check_backward_red and failsafe_check_forward_red > red_uppers[piece_index]: 
                                     consistencies[piece_index] = False
                                 if failsafe_check_backward_red and failsafe_check_forward_red < red_lowers[piece_index]:
@@ -306,6 +308,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                     consistencies[piece_index] = False
                                 if failsafe_check_backward_blue and failsafe_check_forward_red < blue_lowers[piece_index]:
                                     consistencies[piece_index] = False
+                                """
                                 
                                 if failsafe_check_backward_red and failsafe_check_forward_red <= red_uppers[piece_index]:
                                     if failsafe_check_backward_green and failsafe_check_forward_green <= green_uppers[piece_index]:
