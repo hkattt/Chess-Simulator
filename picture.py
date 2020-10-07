@@ -15,12 +15,12 @@ camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 #time.sleep(0.005)  # If you don't wait, the image will be dark
 
-for i in range(0,10):
-    time.sleep(i/10)
+for i in range(0,2):
+    time.sleep(i/2)
     return_value, image = camera.read()
     final_image = image[y:y+h, x:x+w]
     #resized_image = cv2.resize(image, (320, 320))
-    cv2.imwrite("C:/Users/Harry/AppData/Local/Programs/Python/Python38-32/opencv" + str(i) + ".png", final_image)
+    cv2.imwrite("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/chess_image" + str(i) + ".png", final_image)
     print(i)
  
 '''

@@ -1,11 +1,11 @@
 from PIL import Image
 
 class Piece():
-    def __init__(self, square_x, square_y, colour, piece_type):
+    def __init__(self, square_x, square_y, colour, symbol):
         self.square_y = square_y # (pixel width(0,40))
         self.square_x = square_x
         self.colour = colour # (B or W)
-        self.piece_type = piece_type # (K, Q, Kn, R, B, P)
+        self.symbol = symbol # (K, Q, Kn, R, B, P)
 
 
 pieces = [] #list of pieces
@@ -230,6 +230,9 @@ consistency_12 = False
 
 #-------------------------------------------#
  
+image = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png") #make sure using forward slashes.
+image_rgb = image.convert("RGB")
+
 for i in range (60, 540, 60): #Checking through each individually
     for j in range(60, 540, 60): #Checking through each individually
         exit = False
@@ -238,9 +241,7 @@ for i in range (60, 540, 60): #Checking through each individually
 
 
 #-------------------------------------------------------- pawn_white ---------------- piece_1 ----------------------------------------------------------#
-
-                image = Image.open("C:/Users/Harry/Desktop/Code V3/py.png") #make sure using forward slashes.
-                image_rgb = image.convert("RGB")
+                
                 pixel_red, pixel_green, pixel_blue = image_rgb.getpixel((x,y))
     
                 if pixel_red <= pixel_red_upper_bound_1 and pixel_red >= pixel_red_lower_bound_1:
@@ -272,7 +273,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_1 = True
 
                             if consistency_1 == True:
-                                pieces.append(Piece(i, j, "w", "white_pawn"))
+                                pieces.append(Piece(i, j, "W", "P"))
                                 exit = True
                                 break
                             
@@ -310,7 +311,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_2 = True
 
                             if consistency_2 == True:
-                                pieces.append(Piece(i, j, "b", "black_pawn"))
+                                pieces.append(Piece(i, j, "B", "P"))
                                 exit = True
                                 break
                             
@@ -348,7 +349,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_3 = True
 
                             if consistency_3 == True:
-                                pieces.append(Piece(i, j, "w", "white_rook"))
+                                pieces.append(Piece(i, j, "W", "R"))
                                 exit = True
                                 break
                             
@@ -386,7 +387,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_4 = True
 
                             if consistency_4 == True:
-                                pieces.append(Piece(i, j, "b", "black_rook"))
+                                pieces.append(Piece(i, j, "B", "R"))
                                 exit = True
                                 break
                             
@@ -424,7 +425,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_5 = True
 
                             if consistency_5 == True:
-                                pieces.append(Piece(i, j, "w", "bishop_white"))
+                                pieces.append(Piece(i, j, "W", "B"))
                                 exit = True
                                 break
                             
@@ -462,7 +463,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_6 = True
 
                             if consistency_6 == True:
-                                pieces.append(Piece(i, j, "b", "bishop_black"))
+                                pieces.append(Piece(i, j, "B", "B"))
                                 exit = True
                                 break
                             
@@ -500,7 +501,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_7 = True
 
                             if consistency_7 == True:
-                                pieces.append(Piece(i, j, "w", "knight_white"))
+                                pieces.append(Piece(i, j, "W", "Kn"))
                                 exit = True
                                 break
                             
@@ -538,7 +539,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_8 = True
 
                             if consistency_8 == True:
-                                pieces.append(Piece(i, j, "b", "knight_black"))
+                                pieces.append(Piece(i, j, "B", "Kn"))
                                 exit = True
                                 break
                             
@@ -576,7 +577,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_9 = True
 
                             if consistency_9 == True:
-                                pieces.append(Piece(i, j, "w", "king_white"))
+                                pieces.append(Piece(i, j, "W", "K"))
                                 exit = True
                                 break
                             
@@ -614,7 +615,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_10 = True
 
                             if consistency_10 == True:
-                                pieces.append(Piece(i, j, "b", "king_black"))
+                                pieces.append(Piece(i, j, "B", "K"))
                                 exit = True
                                 break
                             
@@ -652,7 +653,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_11 = True
 
                             if consistency_11 == True:
-                                pieces.append(Piece(i, j, "w", "queen_white"))
+                                pieces.append(Piece(i, j, "W", "Q"))
                                 exit = True
                                 break
                             
@@ -690,7 +691,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                                    consistency_12 = True
 
                             if consistency_12 == True:
-                                pieces.append(Piece(i, j, "b", "queen_black"))
+                                pieces.append(Piece(i, j, "B", "Q"))
                                 exit = True
                                 break
                             
@@ -703,6 +704,24 @@ for i in range (60, 540, 60): #Checking through each individually
 
 print(len(pieces))
 for piece in pieces:
-    print(piece.piece_type)
-    print(piece.square_x)
-    print(piece.square_y)
+    print(piece.colour + piece.symbol)
+    print(piece.square_x // 60 )
+    print(piece.square_y // 60)
+
+board = [[".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."],
+        [".", ".", ".", ".", ".", ".", ".", "."]]
+
+for x in range(0, 8):
+    for y in range(0, 8):
+        for piece in pieces:
+            if (piece.square_x // 60) - 1 == x and (piece.square_y // 60) - 1 == y:
+                board[y][x] = piece.colour + piece.symbol
+
+for row in board:
+    print(row)
