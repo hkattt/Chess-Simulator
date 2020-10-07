@@ -228,485 +228,127 @@ pixel_blue_lower_bound_12 = 0
 
 consistency_12 = False
 
-#-------------------------------------------#
- 
+# several dictionaries are used to easily access the variables.
+
+red_uppers = {
+            1 : pixel_red_upper_bound_1, 2 : pixel_red_upper_bound_2, 3 : pixel_red_upper_bound_3, 4 : pixel_red_upper_bound_4, 5 : pixel_red_upper_bound_5, 
+            6 : pixel_red_upper_bound_6, 7 : pixel_red_upper_bound_7, 8 : pixel_red_upper_bound_8, 9 : pixel_red_upper_bound_9, 10 : pixel_red_upper_bound_10,
+            11 : pixel_red_upper_bound_11, 12 : pixel_red_upper_bound_12
+            }
+
+
+red_lowers = {
+            1 : pixel_red_lower_bound_1, 2 : pixel_red_lower_bound_2, 3 : pixel_red_lower_bound_3, 4 : pixel_red_lower_bound_4, 5 : pixel_red_lower_bound_5, 
+            6 : pixel_red_lower_bound_6, 7 : pixel_red_lower_bound_7, 8 : pixel_red_lower_bound_8, 9 : pixel_red_lower_bound_9, 10 : pixel_red_lower_bound_10,
+            11 : pixel_red_lower_bound_11, 12 : pixel_red_lower_bound_12
+            }
+
+green_uppers = {
+            1 : pixel_green_upper_bound_1, 2 : pixel_green_upper_bound_2, 3 : pixel_green_upper_bound_3, 4 : pixel_green_upper_bound_4, 5 : pixel_green_upper_bound_5, 
+            6 : pixel_green_upper_bound_6, 7 : pixel_green_upper_bound_7, 8 : pixel_green_upper_bound_8, 9 : pixel_green_upper_bound_9, 10 : pixel_green_upper_bound_10,
+            11 : pixel_green_upper_bound_11, 12 : pixel_green_upper_bound_12
+            }
+green_lowers = {
+            1 : pixel_green_lower_bound_1, 2 : pixel_green_lower_bound_2, 3 : pixel_green_lower_bound_3, 4 : pixel_green_lower_bound_4, 5 : pixel_green_lower_bound_5, 
+            6 : pixel_green_lower_bound_6, 7 : pixel_green_lower_bound_7, 8 : pixel_green_lower_bound_8, 9 : pixel_green_lower_bound_9, 10 : pixel_green_lower_bound_10,
+            11 : pixel_green_lower_bound_11, 12 : pixel_green_lower_bound_12
+            }
+
+blue_uppers = {
+            1 : pixel_blue_upper_bound_1, 2 : pixel_blue_upper_bound_2, 3 : pixel_blue_upper_bound_3, 4 : pixel_blue_upper_bound_4, 5 : pixel_blue_upper_bound_5, 
+            6 : pixel_blue_upper_bound_6, 7 : pixel_blue_upper_bound_7, 8 : pixel_blue_upper_bound_8, 9 : pixel_blue_upper_bound_9, 10 : pixel_blue_upper_bound_10,
+            11 : pixel_blue_upper_bound_11, 12 : pixel_blue_upper_bound_12
+            }
+
+blue_lowers = {
+            1 : pixel_blue_lower_bound_1, 2 : pixel_blue_lower_bound_2, 3 : pixel_blue_lower_bound_3, 4 : pixel_blue_lower_bound_4, 5 : pixel_blue_lower_bound_5, 
+            6 : pixel_blue_lower_bound_6, 7 : pixel_blue_lower_bound_7, 8 : pixel_blue_lower_bound_8, 9 : pixel_blue_lower_bound_9, 10 : pixel_blue_lower_bound_10,
+            11 : pixel_blue_lower_bound_11, 12 : pixel_blue_lower_bound_12
+            }
+
+consistencies = {
+                1 : consistency_1, 2 : consistency_2, 3 : consistency_3, 4 : consistency_4, 5 : consistency_5, 6 : consistency_6, 7 : consistency_7, 8 : consistency_8,
+                9 : consistency_9, 10 : consistency_10, 11 : consistency_11, 12 : consistency_12
+                }
+
+# loads in the image 
 image = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png") #make sure using forward slashes.
 image_rgb = image.convert("RGB")
+
 
 for i in range (60, 540, 60): #Checking through each individually
     for j in range(60, 540, 60): #Checking through each individually
         exit = False
         for x in range(i - 60, i, 5):
-            for y in range(j - 60, j, 5):   
-
-
-#-------------------------------------------------------- pawn_white ---------------- piece_1 ----------------------------------------------------------#
+            for y in range(j - 60, j, 5):
+                       
+                pixel_red, pixel_green, pixel_blue = image_rgb.getpixel((x, y)) # RGB value at (x, y) on the image
                 
-                pixel_red, pixel_green, pixel_blue = image_rgb.getpixel((x,y))
-    
-                if pixel_red <= pixel_red_upper_bound_1 and pixel_red >= pixel_red_lower_bound_1:
-                    if pixel_green <= pixel_green_upper_bound_1 and pixel_green >= pixel_green_lower_bound_1:
-                        if pixel_blue <= pixel_blue_upper_bound_1 and pixel_blue >= pixel_blue_lower_bound_1:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
+                # iterates over all of the possible piece colours
+                for piece_index in range(1, 13):
 
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_1: 
-                                consistency_1 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_1:
-                                consistency_1 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_1:
-                                consistency_1 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_1:
-                                consistency_1 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_1: 
-                                consistency_1 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_1:
-                                consistency_1 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_1:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_1:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_1:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_1:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_1:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_1:
-                                                   consistency_1 = True
+                    if pixel_red <= red_uppers[piece_index] and pixel_red >= red_lowers[piece_index]:
+                        if pixel_green <= green_uppers[piece_index] and pixel_green >= green_lowers[piece_index]:
+                            if pixel_blue <= blue_uppers[piece_index] and pixel_blue >= blue_lowers[piece_index]:
+                        
+                                failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
+                                failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
 
-                            if consistency_1 == True:
-                                pieces.append(Piece(i, j, "W", "P"))
-                                exit = True
-                                break
-                            
-                            if consistency_1 == False:
-                                print("stinky")
+                                if failsafe_check_backward_red and failsafe_check_forward_red > red_uppers[piece_index]: 
+                                    consistencies[piece_index] = False
+                                if failsafe_check_backward_red and failsafe_check_forward_red < red_lowers[piece_index]:
+                                    consistencies[piece_index] = False
+                                if failsafe_check_backward_green and failsafe_check_forward_green > green_uppers[piece_index]:
+                                    consistencies[piece_index] = False
+                                if failsafe_check_backward_green and failsafe_check_forward_red < green_lowers[piece_index]:
+                                    consistencies[piece_index] = False
+                                if failsafe_check_backward_blue and failsafe_check_forward_blue > blue_uppers[piece_index]: 
+                                    consistencies[piece_index] = False
+                                if failsafe_check_backward_blue and failsafe_check_forward_red < blue_lowers[piece_index]:
+                                    consistencies[piece_index] = False
+                                
+                                if failsafe_check_backward_red and failsafe_check_forward_red <= red_uppers[piece_index]:
+                                    if failsafe_check_backward_green and failsafe_check_forward_green <= green_uppers[piece_index]:
+                                        if failsafe_check_backward_blue and failsafe_check_forward_blue <= blue_uppers[piece_index]:
+                                            if failsafe_check_backward_red and failsafe_check_forward_red >= red_lowers[piece_index]:
+                                                if failsafe_check_backward_green and failsafe_check_forward_green >= green_lowers[piece_index]:
+                                                    if failsafe_check_backward_blue and failsafe_check_forward_blue >= blue_lowers[piece_index]:
+                                                        consistencies[piece_index] = True
 
-#-------------------------------------------------------- pawn_black ---------------- piece_2 ----------------------------------------------------------#
-
-                if pixel_red <= pixel_red_upper_bound_2 and pixel_red >= pixel_red_lower_bound_2:
-                    if pixel_green <= pixel_green_upper_bound_2 and pixel_green >= pixel_green_lower_bound_2:
-                        if pixel_blue <= pixel_blue_upper_bound_2 and pixel_blue >= pixel_blue_lower_bound_2:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_2: 
-                                consistency_2 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_2:
-                                consistency_2 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_2:
-                                consistency_2 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_2:
-                                consistency_2 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_2: 
-                                consistency_2 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_2:
-                                consistency_2 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_2:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_2:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_2:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_2:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_2:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_2:
-                                                   consistency_2 = True
-
-                            if consistency_2 == True:
-                                pieces.append(Piece(i, j, "B", "P"))
-                                exit = True
-                                break
-                            
-                            if consistency_2 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- rook_white ---------------- piece_3 ----------------------------------------------------------#                                
-
-                if pixel_red <= pixel_red_upper_bound_3 and pixel_red >= pixel_red_lower_bound_3:
-                    if pixel_green <= pixel_green_upper_bound_3 and pixel_green >= pixel_green_lower_bound_3:
-                        if pixel_blue <= pixel_blue_upper_bound_3 and pixel_blue >= pixel_blue_lower_bound_3:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_3: 
-                                consistency_3 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_3:
-                                consistency_3 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_3:
-                                consistency_3 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_3:
-                                consistency_3 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_3: 
-                                consistency_3 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_3:
-                                consistency_3 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_3:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_3:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_3:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_3:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_3:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_3:
-                                                   consistency_3 = True
-
-                            if consistency_3 == True:
-                                pieces.append(Piece(i, j, "W", "R"))
-                                exit = True
-                                break
-                            
-                            if consistency_3 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- rook_black ---------------- piece_4 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_4 and pixel_red >= pixel_red_lower_bound_4:
-                    if pixel_green <= pixel_green_upper_bound_4 and pixel_green >= pixel_green_lower_bound_4:
-                        if pixel_blue <= pixel_blue_upper_bound_4 and pixel_blue >= pixel_blue_lower_bound_4:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_4: 
-                                consistency_4 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_4:
-                                consistency_4 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_4:
-                                consistency_4 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_4:
-                                consistency_4 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_4: 
-                                consistency_4 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_4:
-                                consistency_4 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_4:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_4:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_4:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_4:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_4:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_4:
-                                                   consistency_4 = True
-
-                            if consistency_4 == True:
-                                pieces.append(Piece(i, j, "B", "R"))
-                                exit = True
-                                break
-                            
-                            if consistency_4 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- bishop_white ---------------- piece_5 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_5 and pixel_red >= pixel_red_lower_bound_5:
-                    if pixel_green <= pixel_green_upper_bound_5 and pixel_green >= pixel_green_lower_bound_5:
-                        if pixel_blue <= pixel_blue_upper_bound_5 and pixel_blue >= pixel_blue_lower_bound_5:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_5: 
-                                consistency_5 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_5:
-                                consistency_5 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_5:
-                                consistency_5 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_5:
-                                consistency_5 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_5: 
-                                consistency_5 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_5:
-                                consistency_5 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_5:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_5:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_5:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_5:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_5:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_5:
-                                                   consistency_5 = True
-
-                            if consistency_5 == True:
-                                pieces.append(Piece(i, j, "W", "B"))
-                                exit = True
-                                break
-                            
-                            if consistency_5 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- bishop_black ---------------- piece_6 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_6 and pixel_red >= pixel_red_lower_bound_6:
-                    if pixel_green <= pixel_green_upper_bound_6 and pixel_green >= pixel_green_lower_bound_6:
-                        if pixel_blue <= pixel_blue_upper_bound_6 and pixel_blue >= pixel_blue_lower_bound_6:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_6: 
-                                consistency_6 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_6:
-                                consistency_6 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_6:
-                                consistency_6 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_6:
-                                consistency_6 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_6: 
-                                consistency_6 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_6:
-                                consistency_6 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_6:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_6:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_6:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_6:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_6:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_6:
-                                                   consistency_6 = True
-
-                            if consistency_6 == True:
-                                pieces.append(Piece(i, j, "B", "B"))
-                                exit = True
-                                break
-                            
-                            if consistency_6 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- knight_white ---------------- piece_7 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_7 and pixel_red >= pixel_red_lower_bound_7:
-                    if pixel_green <= pixel_green_upper_bound_7 and pixel_green >= pixel_green_lower_bound_7:
-                        if pixel_blue <= pixel_blue_upper_bound_7 and pixel_blue >= pixel_blue_lower_bound_7:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_7: 
-                                consistency_7 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_7:
-                                consistency_7 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_7:
-                                consistency_7 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_7:
-                                consistency_7 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_7: 
-                                consistency_7 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_7:
-                                consistency_7 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_7:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_7:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_7:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_7:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_7:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_7:
-                                                   consistency_7 = True
-
-                            if consistency_7 == True:
-                                pieces.append(Piece(i, j, "W", "Kn"))
-                                exit = True
-                                break
-                            
-                            if consistency_7 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- knight_black ---------------- piece_8 ----------------------------------------------------------#   
-
-                if pixel_red <= pixel_red_upper_bound_8 and pixel_red >= pixel_red_lower_bound_8:
-                    if pixel_green <= pixel_green_upper_bound_8 and pixel_green >= pixel_green_lower_bound_8:
-                        if pixel_blue <= pixel_blue_upper_bound_8 and pixel_blue >= pixel_blue_lower_bound_8:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_8: 
-                                consistency_8 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_8:
-                                consistency_8 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_8:
-                                consistency_8 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_8:
-                                consistency_8 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_8: 
-                                consistency_8 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_8:
-                                consistency_8 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_8:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_8:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_8:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_8:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_8:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_8:
-                                                   consistency_8 = True
-
-                            if consistency_8 == True:
-                                pieces.append(Piece(i, j, "B", "Kn"))
-                                exit = True
-                                break
-                            
-                            if consistency_8 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- king_white ---------------- piece_9 ----------------------------------------------------------#   
-
-                if pixel_red <= pixel_red_upper_bound_9 and pixel_red >= pixel_red_lower_bound_9:
-                    if pixel_green <= pixel_green_upper_bound_9 and pixel_green >= pixel_green_lower_bound_9:
-                        if pixel_blue <= pixel_blue_upper_bound_9 and pixel_blue >= pixel_blue_lower_bound_9:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_9: 
-                                consistency_9 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_9:
-                                consistency_9 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_9:
-                                consistency_9 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_9:
-                                consistency_9 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_9: 
-                                consistency_9 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_9:
-                                consistency_9 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_9:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_9:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_9:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_9:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_9:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_9:
-                                                   consistency_9 = True
-
-                            if consistency_9 == True:
-                                pieces.append(Piece(i, j, "W", "K"))
-                                exit = True
-                                break
-                            
-                            if consistency_9 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- king_black ---------------- piece_10 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_10 and pixel_red >= pixel_red_lower_bound_10:
-                    if pixel_green <= pixel_green_upper_bound_10 and pixel_green >= pixel_green_lower_bound_10:
-                        if pixel_blue <= pixel_blue_upper_bound_10 and pixel_blue >= pixel_blue_lower_bound_10:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_10: 
-                                consistency_10 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_10:
-                                consistency_10 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_10:
-                                consistency_10 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_10:
-                                consistency_10 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_10: 
-                                consistency_10 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_10:
-                                consistency_10 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_10:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_10:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_10:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_10:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_10:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_10:
-                                                   consistency_10 = True
-
-                            if consistency_10 == True:
-                                pieces.append(Piece(i, j, "B", "K"))
-                                exit = True
-                                break
-                            
-                            if consistency_10 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- queen_white ---------------- piece_11 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_11 and pixel_red >= pixel_red_lower_bound_11:
-                    if pixel_green <= pixel_green_upper_bound_11 and pixel_green >= pixel_green_lower_bound_11:
-                        if pixel_blue <= pixel_blue_upper_bound_11 and pixel_blue >= pixel_blue_lower_bound_11:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_11: 
-                                consistency_11 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_11:
-                                consistency_11 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_11:
-                                consistency_11 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_11:
-                                consistency_11 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_11: 
-                                consistency_11 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_11:
-                                consistency_11 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_11:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_11:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_11:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_11:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_11:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_11:
-                                                   consistency_11 = True
-
-                            if consistency_11 == True:
-                                pieces.append(Piece(i, j, "W", "Q"))
-                                exit = True
-                                break
-                            
-                            if consistency_11 == False:
-                                print("stinky")
-
-#-------------------------------------------------------- queen_black ---------------- piece_12 ----------------------------------------------------------#     
-
-                if pixel_red <= pixel_red_upper_bound_12 and pixel_red >= pixel_red_lower_bound_12:
-                    if pixel_green <= pixel_green_upper_bound_12 and pixel_green >= pixel_green_lower_bound_12:
-                        if pixel_blue <= pixel_blue_upper_bound_12 and pixel_blue >= pixel_blue_lower_bound_12:
-                    
-                            failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
-                            failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
-
-                            if failsafe_check_backward_red and failsafe_check_forward_red > pixel_red_upper_bound_12: 
-                                consistency_12 = False
-                            if failsafe_check_backward_red and failsafe_check_forward_red < pixel_red_lower_bound_12:
-                                consistency_12 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_green > pixel_green_upper_bound_12:
-                                consistency_12 = False
-                            if failsafe_check_backward_green and failsafe_check_forward_red < pixel_green_lower_bound_12:
-                                consistency_12 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_blue > pixel_blue_upper_bound_12: 
-                                consistency_12 = False
-                            if failsafe_check_backward_blue and failsafe_check_forward_red < pixel_blue_lower_bound_12:
-                                consistency_12 = False
-                            
-                            if failsafe_check_backward_red and failsafe_check_forward_red <= pixel_red_upper_bound_12:
-                                if failsafe_check_backward_green and failsafe_check_forward_green <= pixel_green_upper_bound_12:
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue <= pixel_blue_upper_bound_12:
-                                        if failsafe_check_backward_red and failsafe_check_forward_red >= pixel_red_lower_bound_12:
-                                            if failsafe_check_backward_green and failsafe_check_forward_green >= pixel_green_lower_bound_12:
-                                               if failsafe_check_backward_blue and failsafe_check_forward_blue >= pixel_blue_lower_bound_12:
-                                                   consistency_12 = True
-
-                            if consistency_12 == True:
-                                pieces.append(Piece(i, j, "B", "Q"))
-                                exit = True
-                                break
-                            
-                            if consistency_12 == False:
-                                print("stinky")
-
-
+                                # passed the failsafe
+                                if consistencies[piece_index]:
+                                    # creates a piece corresponding to the current piece index
+                                    if piece_index == 1:
+                                        pieces.append(Piece(i, j, "W", "P"))
+                                    elif piece_index == 2:
+                                        pieces.append(Piece(i, j, "B", "P"))
+                                    elif piece_index == 3:
+                                        pieces.append(Piece(i, j, "W", "R"))
+                                    elif piece_index == 4:
+                                        pieces.append(Piece(i, j, "B", "R"))
+                                    elif piece_index == 5:
+                                        pieces.append(Piece(i, j, "W", "B"))
+                                    elif piece_index == 6:
+                                        pieces.append(Piece(i, j, "B", "B"))
+                                    elif piece_index == 7:
+                                        pieces.append(Piece(i, j, "W", "Kn"))
+                                    elif piece_index == 8:
+                                        pieces.append(Piece(i, j, "B", "Kn"))
+                                    elif piece_index == 9:
+                                        pieces.append(Piece(i, j, "W", "K"))
+                                    elif piece_index == 10:
+                                        pieces.append(Piece(i, j, "B", "K"))
+                                    elif piece_index == 11:
+                                        pieces.append(Piece(i, j, "W", "Q"))
+                                    elif piece_index == 12:
+                                        pieces.append(Piece(i, j, "B", "Q"))
+                                    exit = True
+                                    break
+                                # failed the failsafe
+                                if consistencies[piece_index] == False:
+                                    print("stinky")
             if exit:
                 break
-
-print(len(pieces))
-for piece in pieces:
-    print(piece.colour + piece.symbol)
-    print(piece.square_x // 60 )
-    print(piece.square_y // 60)
 
 board = [[".", ".", ".", ".", ".", ".", ".", "."],
         [".", ".", ".", ".", ".", ".", ".", "."],
@@ -717,6 +359,7 @@ board = [[".", ".", ".", ".", ".", ".", ".", "."],
         [".", ".", ".", ".", ".", ".", ".", "."],
         [".", ".", ".", ".", ".", ".", ".", "."]]
 
+# adding pieces to the board array
 for x in range(0, 8):
     for y in range(0, 8):
         for piece in pieces:
