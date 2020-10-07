@@ -230,43 +230,43 @@ consistency_12 = False
 
 # several dictionaries are used to easily access the variables.
 
-red_uppers = {
+RED_UPPERS = {
             1 : pixel_red_upper_bound_1, 2 : pixel_red_upper_bound_2, 3 : pixel_red_upper_bound_3, 4 : pixel_red_upper_bound_4, 5 : pixel_red_upper_bound_5, 
             6 : pixel_red_upper_bound_6, 7 : pixel_red_upper_bound_7, 8 : pixel_red_upper_bound_8, 9 : pixel_red_upper_bound_9, 10 : pixel_red_upper_bound_10,
             11 : pixel_red_upper_bound_11, 12 : pixel_red_upper_bound_12
             }
 
 
-red_lowers = {
+RED_LOWERS = {
             1 : pixel_red_lower_bound_1, 2 : pixel_red_lower_bound_2, 3 : pixel_red_lower_bound_3, 4 : pixel_red_lower_bound_4, 5 : pixel_red_lower_bound_5, 
             6 : pixel_red_lower_bound_6, 7 : pixel_red_lower_bound_7, 8 : pixel_red_lower_bound_8, 9 : pixel_red_lower_bound_9, 10 : pixel_red_lower_bound_10,
             11 : pixel_red_lower_bound_11, 12 : pixel_red_lower_bound_12
             }
 
-green_uppers = {
+GREEN_UPPERS = {
             1 : pixel_green_upper_bound_1, 2 : pixel_green_upper_bound_2, 3 : pixel_green_upper_bound_3, 4 : pixel_green_upper_bound_4, 5 : pixel_green_upper_bound_5, 
             6 : pixel_green_upper_bound_6, 7 : pixel_green_upper_bound_7, 8 : pixel_green_upper_bound_8, 9 : pixel_green_upper_bound_9, 10 : pixel_green_upper_bound_10,
             11 : pixel_green_upper_bound_11, 12 : pixel_green_upper_bound_12
             }
-green_lowers = {
+GREEN_LOWERS = {
             1 : pixel_green_lower_bound_1, 2 : pixel_green_lower_bound_2, 3 : pixel_green_lower_bound_3, 4 : pixel_green_lower_bound_4, 5 : pixel_green_lower_bound_5, 
             6 : pixel_green_lower_bound_6, 7 : pixel_green_lower_bound_7, 8 : pixel_green_lower_bound_8, 9 : pixel_green_lower_bound_9, 10 : pixel_green_lower_bound_10,
             11 : pixel_green_lower_bound_11, 12 : pixel_green_lower_bound_12
             }
 
-blue_uppers = {
+BLUE_UPPERS = {
             1 : pixel_blue_upper_bound_1, 2 : pixel_blue_upper_bound_2, 3 : pixel_blue_upper_bound_3, 4 : pixel_blue_upper_bound_4, 5 : pixel_blue_upper_bound_5, 
             6 : pixel_blue_upper_bound_6, 7 : pixel_blue_upper_bound_7, 8 : pixel_blue_upper_bound_8, 9 : pixel_blue_upper_bound_9, 10 : pixel_blue_upper_bound_10,
             11 : pixel_blue_upper_bound_11, 12 : pixel_blue_upper_bound_12
             }
 
-blue_lowers = {
+BLUE_LOWERS = {
             1 : pixel_blue_lower_bound_1, 2 : pixel_blue_lower_bound_2, 3 : pixel_blue_lower_bound_3, 4 : pixel_blue_lower_bound_4, 5 : pixel_blue_lower_bound_5, 
             6 : pixel_blue_lower_bound_6, 7 : pixel_blue_lower_bound_7, 8 : pixel_blue_lower_bound_8, 9 : pixel_blue_lower_bound_9, 10 : pixel_blue_lower_bound_10,
             11 : pixel_blue_lower_bound_11, 12 : pixel_blue_lower_bound_12
             }
 
-consistencies = {
+CONSISTENCIES = {
                 1 : consistency_1, 2 : consistency_2, 3 : consistency_3, 4 : consistency_4, 5 : consistency_5, 6 : consistency_6, 7 : consistency_7, 8 : consistency_8,
                 9 : consistency_9, 10 : consistency_10, 11 : consistency_11, 12 : consistency_12
                 }
@@ -287,9 +287,9 @@ for i in range (60, 540, 60): #Checking through each individually
                 # iterates over all of the possible piece colours
                 for piece_index in range(1, 13):
 
-                    if pixel_red <= red_uppers[piece_index] and pixel_red >= red_lowers[piece_index]:
-                        if pixel_green <= green_uppers[piece_index] and pixel_green >= green_lowers[piece_index]:
-                            if pixel_blue <= blue_uppers[piece_index] and pixel_blue >= blue_lowers[piece_index]:
+                    if pixel_red <= RED_UPPERS[piece_index] and pixel_red >= RED_LOWERS[piece_index]:
+                        if pixel_green <= GREEN_UPPERS[piece_index] and pixel_green >= GREEN_LOWERS[piece_index]:
+                            if pixel_blue <= BLUE_UPPERS[piece_index] and pixel_blue >= BLUE_LOWERS[piece_index]:
                         
                                 failsafe_check_forward_red, failsafe_check_forward_green, failsafe_check_forward_blue = image_rgb.getpixel((x + 1,y + 1))
                                 failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
@@ -310,16 +310,16 @@ for i in range (60, 540, 60): #Checking through each individually
                                     consistencies[piece_index] = False
                                 """
                                 
-                                if failsafe_check_backward_red and failsafe_check_forward_red <= red_uppers[piece_index]:
-                                    if failsafe_check_backward_green and failsafe_check_forward_green <= green_uppers[piece_index]:
-                                        if failsafe_check_backward_blue and failsafe_check_forward_blue <= blue_uppers[piece_index]:
-                                            if failsafe_check_backward_red and failsafe_check_forward_red >= red_lowers[piece_index]:
-                                                if failsafe_check_backward_green and failsafe_check_forward_green >= green_lowers[piece_index]:
-                                                    if failsafe_check_backward_blue and failsafe_check_forward_blue >= blue_lowers[piece_index]:
-                                                        consistencies[piece_index] = True
+                                if failsafe_check_backward_red and failsafe_check_forward_red <= RED_UPPERS[piece_index]:
+                                    if failsafe_check_backward_green and failsafe_check_forward_green <= GREEN_UPPERS[piece_index]:
+                                        if failsafe_check_backward_blue and failsafe_check_forward_blue <= BLUE_UPPERS[piece_index]:
+                                            if failsafe_check_backward_red and failsafe_check_forward_red >= RED_LOWERS[piece_index]:
+                                                if failsafe_check_backward_green and failsafe_check_forward_green >= GREEN_LOWERS[piece_index]:
+                                                    if failsafe_check_backward_blue and failsafe_check_forward_blue >= BLUE_LOWERS[piece_index]:
+                                                        CONSISTENCIES[piece_index] = True
 
                                 # passed the failsafe
-                                if consistencies[piece_index]:
+                                if CONSISTENCIES[piece_index]:
                                     # creates a piece corresponding to the current piece index
                                     if piece_index == 1:
                                         pieces.append(Piece(i, j, "W", "P"))
@@ -348,7 +348,7 @@ for i in range (60, 540, 60): #Checking through each individually
                                     exit = True
                                     break
                                 # failed the failsafe
-                                if consistencies[piece_index] == False:
+                                if CONSISTENCIES[piece_index] == False:
                                     print("stinky")
             if exit:
                 break
