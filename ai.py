@@ -8,8 +8,6 @@ import copy
 from pieces import *
 from move_tiles import *
 
-import time
-
 class AI():
     def __init__(self, colour, depth, game):
         self.colour = colour
