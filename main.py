@@ -9,6 +9,7 @@ import time
 from player import *
 from ai import *
 from board import *
+from vision import *
 
 pg.init() 
 pg.mixer.init()
