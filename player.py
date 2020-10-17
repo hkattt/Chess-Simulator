@@ -6,6 +6,8 @@ import math
 
 # importing required files
 from settings import *
+from vision import *
+from pieces import *
 
 class Player():
     def __init__(self, colour, game):
@@ -142,3 +144,49 @@ class Player():
         """ Updates the board list """
         self.game.board[self.selected_piece.original_y][self.selected_piece.original_x] = "."
         self.game.board[self.selected_piece.y][self.selected_piece.x] = self.selected_piece.colour + self.selected_piece.symbol
+
+    def move_from_img(self):
+        print("AI move:")
+        for row in self.game.board:
+            print(row)
+        print("")
+
+        #loads in the image 
+        image = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png") #make sure using forward slashes.
+        self.game.board = board_from_img(image)
+       
+        print("Img load:")
+        for row in self.game.board:
+            print(row)
+        print("")
+
+        for sprite in self.game.all_sprites:
+            sprite.kill()
+
+        # kings are created before all of the other pieces
+        King(4, 0, "B", self.game.groups, self.game.kings)
+        King(4, 7, "W", self.game.groups, self.game.kings)
+        # iterates over the board array
+        # the board array holds the starting positions of all the pieces
+        for row, tiles in enumerate(self.game.board):
+            for column, tile in enumerate(tiles):
+                # creates object based on each tiles string (string corresponding to each tile)
+                if tile != ".":
+                    # tile colour
+                    if tile[0] == "B":
+                        colour = "B"
+                    else:
+                        colour = "W"
+                    if tile[1:] == "Q":
+                        Queen(column, row, colour, self.game.groups, self.game.kings)
+                    elif tile[1:] == "R":
+                        Rook(column, row, colour, self.game.groups, self.game.kings)
+                    elif tile[1:] == "B":
+                        Bishop(column, row, colour, self.game.groups, self.game.kings)
+                    elif tile[1:] == "Kn":
+                        Knight(column, row, colour, self.game.groups, self.game.kings)
+                    elif tile[1:] == "P":
+                        Pawn(column, row, colour, self.game.groups, self.game.kings)
+        # after the move it is the other players turn
+        self.turn = False
+        self.game.ai.turn = True

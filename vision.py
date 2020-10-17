@@ -12,9 +12,6 @@ class Chess_Piece():
         self.colour = colour # (B or W)
         self.symbol = symbol # (K, Q, Kn, R, B, P)
 
-# loads in the image 
-image = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png") #make sure using forward slashes.
-
 def board_from_img(image):
     pieces = [] #list of pieces
 

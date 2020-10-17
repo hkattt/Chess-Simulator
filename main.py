@@ -9,7 +9,6 @@ import time
 from player import *
 from ai import *
 from board import *
-from vision import *
 
 pg.init() 
 pg.mixer.init()
@@ -43,6 +42,7 @@ class Game():
         King(4, 7, "W", self.groups, self.kings)
         # iterates over the board array
         # the board array holds the starting positions of all the pieces
+
         for row, tiles in enumerate(self.board):
             for column, tile in enumerate(tiles):
                 # creates object based on each tiles string (string corresponding to each tile)
@@ -74,7 +74,9 @@ class Game():
                 self.update()
                 self.paint()
                 if self.white.turn:
-                    self.white.move()
+                    #self.white.move()
+                    self.white.move_from_img()
+                    time.sleep(5)
                 elif self.ai.turn:
                     self.ai.move()
 
