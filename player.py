@@ -146,23 +146,16 @@ class Player():
         self.game.board[self.selected_piece.y][self.selected_piece.x] = self.selected_piece.colour + self.selected_piece.symbol
 
     def move_from_img(self):
-        print("AI move:")
-        for row in self.game.board:
-            print(row)
-        print("")
-
         #loads in the image 
         image = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png") #make sure using forward slashes.
-        self.game.board = board_from_img(image)
+        self.game.board = board_from_img(image) # creates board matrix from the image
        
-        print("Img load:")
-        for row in self.game.board:
-            print(row)
-        print("")
-
+        # removes all of the current sprites from the sprite groups       
         for sprite in self.game.all_sprites:
             sprite.kill()
 
+        # creates new pieces using the board matrix
+        
         # kings are created before all of the other pieces
         King(4, 0, "B", self.game.groups, self.game.kings)
         King(4, 7, "W", self.game.groups, self.game.kings)
