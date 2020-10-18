@@ -33,9 +33,9 @@ def board_from_img(image):
             exit = False
             for x in range(i - 60, i, 5):
                 for y in range(j - 60, j, 5):
-                        
-                    pixel_red, pixel_green, pixel_blue = image_rgb.getpixel((x, y)) # RGB value at (x, y) on the image
                     
+                    pixel_red, pixel_green, pixel_blue = image_rgb.getpixel((x, y)) # RGB value at (x, y) on the image
+                        
                     # iterates over all of the possible piece colours
                     for piece_index in range(1, 13):
 
@@ -47,20 +47,19 @@ def board_from_img(image):
                                     failsafe_check_backward_red, failsafe_check_backward_green, failsafe_check_backward_blue = image_rgb.getpixel((x - 1,y - 1))
 
                                     # seems to work without this section; however, kept it here incase I missed something
-                                    """
-                                    if failsafe_check_backward_red and failsafe_check_forward_red > red_uppers[piece_index]: 
-                                        consistencies[piece_index] = False
-                                    if failsafe_check_backward_red and failsafe_check_forward_red < red_lowers[piece_index]:
-                                        consistencies[piece_index] = False
-                                    if failsafe_check_backward_green and failsafe_check_forward_green > green_uppers[piece_index]:
-                                        consistencies[piece_index] = False
-                                    if failsafe_check_backward_green and failsafe_check_forward_red < green_lowers[piece_index]:
-                                        consistencies[piece_index] = False
-                                    if failsafe_check_backward_blue and failsafe_check_forward_blue > blue_uppers[piece_index]: 
-                                        consistencies[piece_index] = False
-                                    if failsafe_check_backward_blue and failsafe_check_forward_red < blue_lowers[piece_index]:
-                                        consistencies[piece_index] = False
-                                    """
+                                    
+                                    if failsafe_check_backward_red and failsafe_check_forward_red > RED_UPPERS[piece_index]: 
+                                        CONSISTENCIES[piece_index] = False
+                                    if failsafe_check_backward_red and failsafe_check_forward_red < RED_LOWERS[piece_index]:
+                                        CONSISTENCIES[piece_index] = False
+                                    if failsafe_check_backward_green and failsafe_check_forward_green > GREEN_UPPERS[piece_index]:
+                                        CONSISTENCIES[piece_index] = False
+                                    if failsafe_check_backward_green and failsafe_check_forward_red < GREEN_LOWERS[piece_index]:
+                                        CONSISTENCIES[piece_index] = False
+                                    if failsafe_check_backward_blue and failsafe_check_forward_blue > BLUE_UPPERS[piece_index]: 
+                                        CONSISTENCIES[piece_index] = False
+                                    if failsafe_check_backward_blue and failsafe_check_forward_red < BLUE_LOWERS[piece_index]:
+                                        CONSISTENCIES[piece_index] = False
                                     
                                     if failsafe_check_backward_red and failsafe_check_forward_red <= RED_UPPERS[piece_index]:
                                         if failsafe_check_backward_green and failsafe_check_forward_green <= GREEN_UPPERS[piece_index]:
@@ -101,7 +100,7 @@ def board_from_img(image):
                                         break
                                     # failed the failsafe
                                     if CONSISTENCIES[piece_index] == False:
-                                        print("stinky")
+                                        pass
                 if exit:
                     break
 
@@ -112,3 +111,17 @@ def board_from_img(image):
                 if (piece.square_x // 60) - 1 == x and (piece.square_y // 60) - 1 == y:
                     board[y][x] = piece.colour + piece.symbol
     return board
+
+IMAGES = {1 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/1.png"), 
+        2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/2.png"), 
+        3 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/3.png"), 
+        4 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/4.png"), 
+        5 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/5.png"), 
+        6 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")}
+
+image = IMAGES[5]
+board = board_from_img(image)
+print("")
+for row in board:
+    print(row)
+print("")

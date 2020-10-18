@@ -145,11 +145,12 @@ class Player():
         self.game.board[self.selected_piece.original_y][self.selected_piece.original_x] = "."
         self.game.board[self.selected_piece.y][self.selected_piece.x] = self.selected_piece.colour + self.selected_piece.symbol
 
-    def move_from_img(self):
-        #loads in the image 
-        image = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png") #make sure using forward slashes.
+    def move_from_img(self, i):
+        #loads in the image
+        
+        image = IMAGES[i] #make sure using forward slashes.
         self.game.board = board_from_img(image) # creates board matrix from the image
-       
+
         # removes all of the current sprites from the sprite groups       
         for sprite in self.game.all_sprites:
             sprite.kill()
