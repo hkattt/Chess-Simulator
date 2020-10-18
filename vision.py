@@ -13,6 +13,7 @@ class Chess_Piece():
         self.symbol = symbol # (K, Q, Kn, R, B, P)
 
 def board_from_img(image):
+    """ Creates a board matrix from an image """
     pieces = [] #list of pieces
 
     # empty board matrix

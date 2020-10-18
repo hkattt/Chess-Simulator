@@ -155,31 +155,7 @@ class Player():
             sprite.kill()
 
         # creates new pieces using the board matrix
-        
-        # kings are created before all of the other pieces
-        King(4, 0, "B", self.game.groups, self.game.kings)
-        King(4, 7, "W", self.game.groups, self.game.kings)
-        # iterates over the board array
-        # the board array holds the starting positions of all the pieces
-        for row, tiles in enumerate(self.game.board):
-            for column, tile in enumerate(tiles):
-                # creates object based on each tiles string (string corresponding to each tile)
-                if tile != ".":
-                    # tile colour
-                    if tile[0] == "B":
-                        colour = "B"
-                    else:
-                        colour = "W"
-                    if tile[1:] == "Q":
-                        Queen(column, row, colour, self.game.groups, self.game.kings)
-                    elif tile[1:] == "R":
-                        Rook(column, row, colour, self.game.groups, self.game.kings)
-                    elif tile[1:] == "B":
-                        Bishop(column, row, colour, self.game.groups, self.game.kings)
-                    elif tile[1:] == "Kn":
-                        Knight(column, row, colour, self.game.groups, self.game.kings)
-                    elif tile[1:] == "P":
-                        Pawn(column, row, colour, self.game.groups, self.game.kings)
+        self.game.generate_pieces()
         # after the move it is the other players turn
         self.turn = False
         self.game.ai.turn = True

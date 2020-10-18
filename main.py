@@ -37,31 +37,8 @@ class Game():
         self.ai = AI("B", 2, self)
         self.teams = [self.white, self.ai]
 
-        # kings are created before all of the other pieces
-        King(4, 0, "B", self.groups, self.kings)
-        King(4, 7, "W", self.groups, self.kings)
-        # iterates over the board array
-        # the board array holds the starting positions of all the pieces
+        self.generate_pieces()
 
-        for row, tiles in enumerate(self.board):
-            for column, tile in enumerate(tiles):
-                # creates object based on each tiles string (string corresponding to each tile)
-                if tile != ".":
-                    # tile colour
-                    if tile[0] == "B":
-                        colour = "B"
-                    else:
-                        colour = "W"
-                    if tile[1:] == "Q":
-                        Queen(column, row, colour, self.groups, self.kings)
-                    elif tile[1:] == "R":
-                        Rook(column, row, colour, self.groups, self.kings)
-                    elif tile[1:] == "B":
-                        Bishop(column, row, colour, self.groups, self.kings)
-                    elif tile[1:] == "Kn":
-                        Knight(column, row, colour, self.groups, self.kings)
-                    elif tile[1:] == "P":
-                        Pawn(column, row, colour, self.groups, self.kings)
         self.run()
 
     def run(self):
@@ -169,6 +146,35 @@ class Game():
                                 running = False
                     self.screen.blit(text, text_rect)
                     pg.display.update()
+    
+    def generate_pieces(self):
+        """ Generates pieces from the current game board """
+        # kings are created before all of the other pieces
+        King(4, 0, "B", self.groups, self.kings)
+        King(4, 7, "W", self.groups, self.kings)
+        # iterates over the board array
+        # the board array holds the starting positions of all the pieces
+
+        for row, tiles in enumerate(self.board):
+            for column, tile in enumerate(tiles):
+                # creates object based on each tiles string (string corresponding to each tile)
+                if tile != ".":
+                    # tile colour
+                    if tile[0] == "B":
+                        colour = "B"
+                    else:
+                        colour = "W"
+                    if tile[1:] == "Q":
+                        Queen(column, row, colour, self.groups, self.kings)
+                    elif tile[1:] == "R":
+                        Rook(column, row, colour, self.groups, self.kings)
+                    elif tile[1:] == "B":
+                        Bishop(column, row, colour, self.groups, self.kings)
+                    elif tile[1:] == "Kn":
+                        Knight(column, row, colour, self.groups, self.kings)
+                    elif tile[1:] == "P":
+                        Pawn(column, row, colour, self.groups, self.kings)
+
 
 game = Game()
 while game.running:
