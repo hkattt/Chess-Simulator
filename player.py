@@ -150,7 +150,7 @@ class Player():
         
         image = IMAGES[i] #make sure using forward slashes.
         self.game.board = board_from_img(image) # creates board matrix from the image
-
+        image.show()
         # removes all of the current sprites from the sprite groups       
         for sprite in self.game.all_sprites:
             sprite.kill()
