@@ -119,7 +119,7 @@ IMAGES = {1 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         5 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/5.png"), 
         6 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")}
 
-image = IMAGES[5]
+image = IMAGES[1]
 board = board_from_img(image)
 print("")
 for row in board:
