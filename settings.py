@@ -281,4 +281,3 @@ CONSISTENCIES = {
                 1 : consistency_1, 2 : consistency_2, 3 : consistency_3, 4 : consistency_4, 5 : consistency_5, 6 : consistency_6, 7 : consistency_7, 8 : consistency_8,
                 9 : consistency_9, 10 : consistency_10, 11 : consistency_11, 12 : consistency_12
                 }
-

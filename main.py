@@ -43,7 +43,7 @@ class Game():
 
     def run(self):
         """ Main game loop """
-        i = 1
+        i = 0
         if self.running:
             self.playing = True
             while self.playing:
@@ -55,10 +55,10 @@ class Game():
                     #self.white.move()
                     self.white.move_from_img(i)
                     time.sleep(5)
+                    i += 1
+                    i %= 3
                 elif self.ai.turn:
                     self.ai.move()
-                i += 1
-                i %= 6
 
     def update(self):
         """ Updates window """
