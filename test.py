@@ -1,11 +1,14 @@
 import serial
+import time
 
-s = serial.Serial('COM7', 9600)
+s = serial.Serial('COM8', 9600)
 print("")
 print(s)
 print("")
 
-s.write(b"1111")
-#msg = s.readline()
-#print(msg)
+while True:
+    s.write(b"1")
+    time.sleep(1)
+msg = s.readline()
+print(msg)
 s.close()
