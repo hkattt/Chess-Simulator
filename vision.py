@@ -157,7 +157,7 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/5.png"), 
         }
 
-#STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")
+#STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/START.png")
 
 #set_colours(STARTING_BOARD, 480)
 
