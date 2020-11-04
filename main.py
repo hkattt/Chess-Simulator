@@ -39,6 +39,10 @@ class Game():
 
         self.generate_pieces()
 
+        # determines the RGB values for all of the pieces
+        STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/START.png")
+        set_colours(STARTING_BOARD, 480)
+
         self.run()
 
     def run(self):

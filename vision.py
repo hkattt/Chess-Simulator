@@ -21,7 +21,8 @@ def lower_bound(RGB):
     return (max(RGB[0] - 5, 0), max(RGB[1] - 5, 0), max(RGB[2] - 5, 0))
 
 def set_colours(image, side_length):
-    """ Updates the upper & lower bound dictionaries to reflect the current lighting conditions """
+    """ Updates the upper & lower bound dictionaries to reflect the current lighting conditions.
+        It does this by finding the RGB pixel values of each piece type (assuming it's the starting position) """
     piece_colours = [] # holds the piece RGB values
     tile_length = side_length // 8 # side length of each tile
     image_rgb = image.convert("RGB")
@@ -156,10 +157,10 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/5.png"), 
         }
 
-STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")
+#STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")
 
-set_colours(STARTING_BOARD, 480)
+#set_colours(STARTING_BOARD, 480)
 
-board = board_from_img(IMAGES[0])
-for row in board:
-    print(row)
+#board = board_from_img(IMAGES[0])
+#for row in board:
+#    print(row)
