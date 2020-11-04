@@ -13,16 +13,20 @@ class Chess_Piece():
         self.symbol = symbol # (K, Q, Kn, R, B, P)
 
 def upper_bound(RGB):
+    """ Returns the upper bound of a given RGB code """
     return  (min(RGB[0] + 5, 255), min(RGB[1] + 5, 255), min(RGB[2] + 5, 255))
 
 def lower_bound(RGB):
+    """ Returns the lower bound of a given RGB code """
     return (max(RGB[0] - 5, 0), max(RGB[1] - 5, 0), max(RGB[2] - 5, 0))
 
 def set_colours(image, side_length):
-    piece_colours = []
+    """ Updates the upper & lower bound dictionaries to reflect the current lighting conditions """
+    piece_colours = [] # holds the piece RGB values
     tile_length = side_length // 8 # side length of each tile
     image_rgb = image.convert("RGB")
     # black pieces
+    # finds the RGB pixel values at the middle of each black piece type's tile
     BR = (image_rgb.getpixel((tile_length - (tile_length // 2), tile_length - (tile_length // 2))))
     BKn = (image_rgb.getpixel(((tile_length * 2) - (tile_length // 2), tile_length - (tile_length // 2))))
     BB = (image_rgb.getpixel(((tile_length * 3) - (tile_length // 2), tile_length - (tile_length // 2))))
@@ -31,6 +35,7 @@ def set_colours(image, side_length):
     BP = (image_rgb.getpixel((tile_length - (tile_length // 2), (tile_length * 2) - (tile_length // 2))))
     
     #white pieces
+    # finds the RGB pixel values at the middle of each white piece type's tile
     WR = (image_rgb.getpixel((tile_length - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
     WKn = (image_rgb.getpixel(((tile_length * 2) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
     WB = (image_rgb.getpixel(((tile_length * 3) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
@@ -38,8 +43,10 @@ def set_colours(image, side_length):
     WK = (image_rgb.getpixel(((tile_length * 5) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
     WP = (image_rgb.getpixel((tile_length - (tile_length // 2), (tile_length * 7) - (tile_length // 2))))
 
+    # appends all of the pixel values into a list
     piece_colours.extend((WP, BP, WR, BR, WB, BB, WKn, BKn, WK, BK, WQ, BQ))
 
+    # adds the pieces upper and lower bounds into the colour code dictionaries
     for i in range(len(piece_colours)):
         RED_UPPERS[i + 1], GREEN_UPPERS[i + 1], BLUE_UPPERS[i + 1] = upper_bound(piece_colours[i])
         RED_LOWERS[i + 1], GREEN_LOWERS[i + 1], BLUE_LOWERS[i + 1] = lower_bound(piece_colours[i])
@@ -149,10 +156,10 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/5.png"), 
         }
 
-img = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")
+STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/test_img.png")
 
-set_colours(img, 480)
+set_colours(STARTING_BOARD, 480)
 
-board = board_from_img(img)
+board = board_from_img(IMAGES[0])
 for row in board:
     print(row)
