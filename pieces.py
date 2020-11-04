@@ -81,7 +81,6 @@ class Piece(pg.sprite.Sprite):
         for king in self.kings:
             if king.colour == self.colour:
                 return king
-
 class King(Piece):
     def __init__(self, x, y, colour, groups, kings):
         super().__init__(x, y, colour, groups, kings)
@@ -144,9 +143,9 @@ class King(Piece):
     def load_image(self):
         """ Loads in the sprite image for the king piece """
         if self.colour == "B":
-            self.image = pg.image.load("blackKing.png")
+            self.image = pg.image.load("images/blackKing.png")
         else:
-            self.image = pg.image.load("whiteKing.png")
+            self.image = pg.image.load("images/whiteKing.png")
 class Queen(Piece):
     def __init__(self, x, y, colour, groups, kings):
         super().__init__(x, y, colour, groups, kings)
@@ -200,9 +199,9 @@ class Queen(Piece):
     def load_image(self):
         """ Loads in the sprite image for the queen piece """
         if self.colour == "B":
-            self.image = pg.image.load("blackQueen.png")
+            self.image = pg.image.load("images/blackQueen.png")
         else:
-            self.image = pg.image.load("whiteQueen.png")
+            self.image = pg.image.load("images/whiteQueen.png")
 class Rook(Piece):
     def __init__(self, x, y, colour, groups, kings):
         super().__init__(x, y, colour, groups, kings)
@@ -243,9 +242,9 @@ class Rook(Piece):
     def load_image(self):
         """ Loads in the sprite image for the rook piece """
         if self.colour == "B":
-            self.image = pg.image.load("blackRook.png")
+            self.image = pg.image.load("images/blackRook.png")
         else:
-            self.image = pg.image.load("whiteRook.png")
+            self.image = pg.image.load("images/whiteRook.png")
 class Bishop(Piece):
     def __init__(self, x, y, colour, groups, kings):
         super().__init__(x, y, colour, groups, kings)
@@ -288,9 +287,9 @@ class Bishop(Piece):
     def load_image(self):
         """ Loads in the sprite image for the bishop piece """
         if self.colour == "B":
-            self.image = pg.image.load("blackBishop.png")
+            self.image = pg.image.load("images/blackBishop.png")
         else:
-            self.image = pg.image.load("whiteBishop.png")
+            self.image = pg.image.load("images/whiteBishop.png")
 class Knight(Piece):
     def __init__(self, x, y, colour, groups, kings):
         super().__init__(x, y, colour, groups, kings)
@@ -320,9 +319,9 @@ class Knight(Piece):
     def load_image(self):
         """ Loads in the sprite image for the knight piece """
         if self.colour == "B":
-            self.image = pg.image.load("blackKnight.png")
+            self.image = pg.image.load("images/blackKnight.png")
         else:
-            self.image = pg.image.load("whiteKnight.png")
+            self.image = pg.image.load("images/whiteKnight.png")
 class Pawn(Piece):
     def __init__(self, x, y, colour, groups, kings):
         super().__init__(x, y, colour, groups, kings)
@@ -384,6 +383,6 @@ class Pawn(Piece):
     def load_image(self):
         """ Loads in the sprite image for the pawn piece """
         if self.colour == "B":
-            self.image = pg.image.load("blackPawn.png")
+            self.image = pg.image.load("images/blackPawn.png")
         else:
-            self.image = pg.image.load("whitePawn.png")
+            self.image = pg.image.load("images/whitePawn.png")
