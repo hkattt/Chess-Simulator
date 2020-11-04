@@ -12,6 +12,60 @@ class Chess_Piece():
         self.colour = colour # (B or W)
         self.symbol = symbol # (K, Q, Kn, R, B, P)
 
+def upper_bound(RGB):
+    return  (min(RGB[0] + 5, 255), min(RGB[1] + 5, 255), min(RGB[2] + 5, 255))
+
+def lower_bound(RGB):
+    return (max(RGB[0] - 5, 0), max(RGB[1] - 5, 0), max(RGB[2] - 5, 0))
+
+def set_colours(image, side_length):
+    tile_length = side_length // 8 # side length of each tile
+    image_rgb = image.convert("RGB")
+    # black pieces
+    BR = (image_rgb.getpixel((tile_length - (tile_length // 2), tile_length - (tile_length // 2))))
+    print(BR, upper_bound(BR), lower_bound(BR))
+    print("")
+    BKn = (image_rgb.getpixel(((tile_length * 2) - (tile_length // 2), tile_length - (tile_length // 2))))
+    BB = (image_rgb.getpixel(((tile_length * 3) - (tile_length // 2), tile_length - (tile_length // 2))))
+    BQ = (image_rgb.getpixel(((tile_length * 4) - (tile_length // 2), tile_length - (tile_length // 2))))
+    BK = (image_rgb.getpixel(((tile_length * 5) - (tile_length // 2), tile_length - (tile_length // 2))))
+    BP = (image_rgb.getpixel((tile_length - (tile_length // 2), (tile_length * 2) - (tile_length // 2))))
+
+    for i in range(1, 6):
+        print((tile_length * i) - (tile_length // 2), tile_length - (tile_length // 2))
+    print((tile_length * 1)  - (tile_length // 2), (tile_length * 2) - (tile_length // 2))
+    print("")
+
+    print(BR)
+    print(BKn)
+    print(BB)
+    print(BQ)
+    print(BK)
+    print(BP)
+    print("")
+
+    #white pieces
+    WR = (image_rgb.getpixel((tile_length - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
+    WKn = (image_rgb.getpixel(((tile_length * 2) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
+    WB = (image_rgb.getpixel(((tile_length * 3) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
+    WQ = (image_rgb.getpixel(((tile_length * 4) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
+    WK = (image_rgb.getpixel(((tile_length * 5) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))))
+    WP = (image_rgb.getpixel((tile_length - (tile_length // 2), (tile_length * 7) - (tile_length // 2))))
+
+    for i in range(1, 6):
+        print((tile_length * i) - (tile_length // 2), (tile_length * 8) - (tile_length // 2))
+    print((tile_length * 1)  - (tile_length // 2), (tile_length * 7) - (tile_length // 2))
+    print("")
+
+    print(WR)
+    print(WKn)
+    print(WB)
+    print(WQ)
+    print(WK)
+    print(WP)
+    print("")
+
+
 def board_from_img(image):
     """ Creates a board matrix from an image """
     pieces = [] #list of pieces
@@ -116,3 +170,5 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         1 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/3.png"), 
         2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/5.png"), 
         }
+
+set_colours(IMAGES[0], 480)

@@ -53,7 +53,7 @@ pixel_blue_upper_bound_2 = 217
 
 pixel_red_lower_bound_2 = 122
 pixel_green_lower_bound_2 = 250
-pixel_blue_lower_bound_2 = 107
+pixel_blue_lower_bound_2 = 207
 
 # ------- Consistency -------#
 
