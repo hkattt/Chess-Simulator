@@ -1,6 +1,7 @@
 
 # importing files
 from settings import *
+import statistics
 
 # importing required modules
 from PIL import Image
@@ -28,7 +29,7 @@ def set_colours(image, side_length):
     image_rgb = image.convert("RGB")
     # black pieces
     # finds the RGB pixel values at the middle of each black piece type's tile
-    BR = (image_rgb.getpixel((tile_length - (tile_length // 2), tile_length - (tile_length // 2))))
+    BR = ((image_rgb.getpixel((tile_length - (tile_length // 2), tile_length - (tile_length // 2))))) 
     BKn = (image_rgb.getpixel(((tile_length * 2) - (tile_length // 2), tile_length - (tile_length // 2))))
     BB = (image_rgb.getpixel(((tile_length * 3) - (tile_length // 2), tile_length - (tile_length // 2))))
     BQ = (image_rgb.getpixel(((tile_length * 4) - (tile_length // 2), tile_length - (tile_length // 2))))
@@ -160,14 +161,15 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         1 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/images/3.png"), 
         2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/images/5.png"), 
         }
+"""
+STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/images/START.png")
 
-#STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/START.png")
+set_colours(STARTING_BOARD, 480)
 
-#set_colours(STARTING_BOARD, 480)
-
-#board = board_from_img(IMAGES[0])
-#for row in board:
-#    print(row)
+board = board_from_img(IMAGES[0])
+for row in board:
+    print(row)
+"""
 
 test_board = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/turn2.png")
 
