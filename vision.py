@@ -47,6 +47,10 @@ def set_colours(image, side_length):
     # appends all of the pixel values into a list
     piece_colours.extend((WP, BP, WR, BR, WB, BB, WKn, BKn, WK, BK, WQ, BQ))
 
+    for colour in piece_colours:
+        print(colour)
+    print("")
+
     # adds the pieces upper and lower bounds into the colour code dictionaries
     for i in range(len(piece_colours)):
         RED_UPPERS[i + 1], GREEN_UPPERS[i + 1], BLUE_UPPERS[i + 1] = upper_bound(piece_colours[i])
@@ -164,3 +168,12 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
 #board = board_from_img(IMAGES[0])
 #for row in board:
 #    print(row)
+
+test_board = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/turn2.png")
+
+set_colours(test_board, 480)
+
+board = board_from_img(test_board)
+
+for row in board:
+    print(row)
