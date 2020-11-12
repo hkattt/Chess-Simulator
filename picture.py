@@ -1,3 +1,7 @@
+""" 
+NOTE: This code is used to take pictures (of the chess boards)
+"""
+
 import time
 import cv2
 camera_port = 2

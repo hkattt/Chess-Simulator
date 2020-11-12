@@ -1,3 +1,11 @@
+"""
+NOTE: If you wish to test piece detection and colour calibration by itself please do as follows:
+        - uncomment the commented section of code at the bottom of the file
+        - run vision.py
+
+This will set the upper and lower bounds using a pre-made starting image. It will then generate a Python
+matrix from from another image using these colour bounds.
+"""
 
 # importing files
 from settings import *
@@ -47,10 +55,6 @@ def set_colours(image, side_length):
 
     # appends all of the pixel values into a list
     piece_colours.extend((WP, BP, WR, BR, WB, BB, WKn, BKn, WK, BK, WQ, BQ))
-
-    for colour in piece_colours:
-        print(colour)
-    print("")
 
     # adds the pieces upper and lower bounds into the colour code dictionaries
     for i in range(len(piece_colours)):
@@ -161,6 +165,7 @@ IMAGES = {0 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/R
         1 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/images/3.png"), 
         2 : Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/images/5.png"), 
         }
+
 """
 STARTING_BOARD = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/images/START.png")
 
@@ -170,12 +175,3 @@ board = board_from_img(IMAGES[0])
 for row in board:
     print(row)
 """
-
-test_board = Image.open("C:/Users/hugok/Desktop/School Work/Gungahlin College/Robotics/Term 3/Hugo-Kat-Pygame-Chess/turn2.png")
-
-set_colours(test_board, 480)
-
-board = board_from_img(test_board)
-
-for row in board:
-    print(row)

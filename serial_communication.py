@@ -1,3 +1,5 @@
+""" NOTE: This file is used for serial communication between a Python script and an Arduino script """
+
 import serial
 import time
 
