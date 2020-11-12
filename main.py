@@ -56,9 +56,9 @@ class Game():
                 self.update()
                 self.paint()
                 if self.white.turn:
-                    #self.white.move()
+                    # self.white.move()
                     self.white.move_from_img(i)
-                    time.sleep(5)
+                    time.sleep(3)
                     i += 1
                     i %= 3
                 elif self.ai.turn:
@@ -86,7 +86,7 @@ class Game():
 
     def board_colours(self):
         """ Draws the board tiles. 
-            This function uses logic from the follows source:
+            This function uses logic from the following source:
             https://github.com/chattarajoy/Shatranj/blob/master/helperfunctions.py 27/7 """
         index = 0 
         colour_index = [WHITE, LIGHT_BROWN] 
