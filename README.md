@@ -56,6 +56,8 @@ If you are interested in seeing how the vision code works by itself, please foll
 To try communicating between an Arduino and a Python script, you will need to follow the instructions in the serial_communication.py. You will also need to upload the receive.ino or send.ino script to an Arduino Uno (i.e. do you want the Arduino to receive or send). When you are trying to communicate between the two scripts do not attempt to open the serial monitor - this will throw an error as it is already being used. 
 NOTE: The Arduino script shows it received certain data by blinking the in-built Arduino Uno LED.
 
+We used the picture.py file to take pictures and analyse them.The code is not implemented into the submission as there is no point taking pictures of a board that does not change. Some of the test images are saved in the images folder. To use it yourself make sure the directory in line 27 is set to a directory of your choice.
+
 Creating a Virtual Environment:
 Step 1 run (what this does is makes a folder in the directory called "venv" and makes it a virtual environment):
 py -m venv venv
