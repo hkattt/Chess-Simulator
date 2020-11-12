@@ -11,7 +11,7 @@ GitHub. 2017. Chattarajoy/Shatranj. [online] Available at: <https://github.com/c
 Sanchez, A., 2016. Anthonyasanchez/Pythonchessai. [online] GitHub. Available at: <https://github.com/AnthonyASanchez/PythonChessAi> [Accessed 2 October 2020].
 
 Instruction Manual:
-You can play against the chess AI or see a live demonstrate in which the AI takes images as inputs by running main.py. By default, main.py is setup to take images as inputs because it shows how my component has been integrated with Harry's. However, you can easily change this by commenting and uncommenting the correct lines in the run() method (view below or on the Final Entry of my documentation).
+You can play against the chess AI or see a live demonstrate in which the AI takes images as inputs by running main.py. By default, main.py is setup to take images as inputs because it shows how my component has been integrated with Harry's. However, you can easily change this by commenting and uncommenting the correct lines in the run() method which is part of the Game class (view below or on the Final Entry of my documentation).
 
 Live demonstration run() method:
     i = 0
