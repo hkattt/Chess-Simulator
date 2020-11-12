@@ -58,8 +58,8 @@ NOTE: The Arduino script shows it received certain data by blinking the in-built
 
 We used the picture.py file to take pictures and analyse them.The code is not implemented into the submission as there is no point taking pictures of a board that does not change. Some of the test images are saved in the images folder. To use it yourself make sure the directory in line 27 is set to a directory of your choice.
 
-Creating a Virtual Environment:
-Step 1 run (what this does is makes a folder in the directory called "venv" and makes it a virtual environment):
+Creating a Virtual Environment (NOTE: These steps assume that you are currently in the project directory):
+Step 1: In Powershell, run the following (what this does is makes a folder in the directory called "venv" and makes it a virtual environment):
 py -m venv venv
 
 Step 2:
