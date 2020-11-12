@@ -13,7 +13,7 @@ Sanchez, A., 2016. Anthonyasanchez/Pythonchessai. [online] GitHub. Available at:
 Instruction Manual:
 You can play against the chess AI or see a live demonstrate in which the AI takes images as inputs by running main.py. By default, main.py is setup to take images as inputs because it shows how my component has been integrated with Harry's. However, you can easily change this by commenting and uncommenting the correct lines in the run() method (view below or on the Final Entry of my documentation).
 
-AI run() method:
+Live demonstration run() method:
     i = 0
     if self.running:
         self.playing = True
@@ -31,7 +31,7 @@ AI run() method:
             elif self.ai.turn:
                 self.ai.move()
 
-Live demonstration run() method
+AI run() method
     # i = 0
     if self.running:
         self.playing = True
