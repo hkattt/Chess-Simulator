@@ -9,6 +9,7 @@ import time
 from player import *
 from ai import *
 from board import *
+from display import *
 
 pg.init() 
 pg.mixer.init()
@@ -20,6 +21,8 @@ class Game():
         self.running = True 
         self.board = board # board containing the position of each piece
         self.font = pg.font.Font("freesansbold.ttf", 32)
+        self.menu_image = pg.image.load("images/menu.jpg")
+        self.menu_image = pg.transform.scale(self.menu_image, (512, 512))
 
     def new(self):
         """ Creates a new game """
@@ -47,22 +50,36 @@ class Game():
 
     def run(self):
         """ Main game loop """
-        i = 0
-        if self.running:
-            self.playing = True
-            while self.playing:
-                self.clock.tick(FPS)
-                self.events()
-                self.update()
-                self.paint()
-                if self.white.turn:
-                    # self.white.move()
-                    self.white.move_from_img(i)
-                    time.sleep(3)
-                    i += 1
-                    i %= 3
-                elif self.ai.turn:
-                    self.ai.move()
+        # playing against the AI
+        if self.mode == "A":
+            if self.running:
+                self.playing = True
+                while self.playing:
+                    self.clock.tick(FPS)
+                    self.events()
+                    self.update()
+                    self.paint()
+                    if self.white.turn:
+                        self.white.move()
+                    elif self.ai.turn:
+                        self.ai.move()
+        # live demo
+        elif self.mode == "D":
+            i = 0
+            if self.running:
+                self.playing = True
+                while self.playing:
+                    self.clock.tick(FPS)
+                    self.events()
+                    self.update()
+                    self.paint()
+                    if self.white.turn:
+                        self.white.move_from_img(i)
+                        time.sleep(3)
+                        i += 1
+                        i %= 3
+                    elif self.ai.turn:
+                        self.ai.move()
 
     def update(self):
         """ Updates window """
@@ -130,7 +147,6 @@ class Game():
         #    self.screen.blit(self.black.selected_piece.image, self.black.selected_piece)
         if self.white.selected_piece != None: # white player is moving a piece
             self.screen.blit(self.white.selected_piece.image, self.white.selected_piece)
-
         pg.display.update() # updates the window
 
     def end_screen(self):
@@ -182,7 +198,75 @@ class Game():
                     elif tile[1:] == "P":
                         Pawn(column, row, colour, self.groups, self.kings)
 
+    def menu_screen(self):
+        """ Main menu screen 
+            NOTE: This was heavily inspired by the difficultly select system used in my previous pygame assignment """
+        waiting = True
+        if self.running:
+            # creating buttons
+            ai_button = Button(WHITE, WIDTH // 3.5, 160, 200, 40, "Play Against the AI", 16, self)
+            demo_button = Button(WHITE, WIDTH // 3.5, 260, 200, 40, "Live Demonstration", 16, self)
+
+            while waiting:
+                # mouse position
+                position = pg.mouse.get_pos()
+                # background image
+                self.screen.blit(self.menu_image, (0, 0))
+                # title
+                self.write("Chess Simulator", WHITE, 30,  WIDTH // 3.5, HEIGHT // 8)
+                # buttons
+                ai_button.draw(self.screen)
+                demo_button.draw(self.screen)
+                pg.display.update()
+
+                for event in pg.event.get():
+                    # checks if the player wants to quit
+                    if event.type == pg.QUIT:
+                        waiting = False
+                        self.running = False
+                    
+                    # checks if the player wants to quit
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_ESCAPE:
+                            waiting = False
+                            self.running = False
+
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        # AI mode
+                        if ai_button.mouse_over(position):
+                            self.mode = "A"
+                            waiting = False
+                        # demo mode
+                        elif demo_button.mouse_over(position):
+                            self.mode = "D"
+                            waiting = False
+
+                    # checking if the user is hovering over a button
+                    if event.type == pg.MOUSEMOTION:
+                        # hovering over the AI button
+                        if ai_button.mouse_over(position):
+                            ai_button.colour = WHITE
+                        else:
+                            ai_button.colour = LIGHT_GREY
+                        # hovering over the demo button
+                        if demo_button.mouse_over(position):
+                            demo_button.colour = WHITE
+                        else:
+                            demo_button.colour = LIGHT_GREY
+
+    def write(self, text, colour, size, x, y):
+        """ Draws text onto the screen """
+        # setting the font size and type
+        font = pg.font.Font("freesansbold.ttf", size)
+        text_surface = font.render(text, True, colour)
+        # creating the font rect
+        text_rect = text_surface.get_rect()
+        text_rect.center = x, y
+        # drawing the text onto the screen
+        self.screen.blit(text_surface, text_rect)
+
 game = Game()
+game.menu_screen()
 while game.running:
     game.new()
     game.end_screen()
