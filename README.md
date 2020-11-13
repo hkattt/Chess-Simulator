@@ -11,45 +11,7 @@ GitHub. 2017. Chattarajoy/Shatranj. [online] Available at: <https://github.com/c
 Sanchez, A., 2016. Anthonyasanchez/Pythonchessai. [online] GitHub. Available at: <https://github.com/AnthonyASanchez/PythonChessAi> [Accessed 2 October 2020].
 
 Instruction Manual:
-You can play against the chess AI or see a live demonstrate in which the AI takes images as inputs by running main.py. By default, main.py is setup to take images as inputs because it shows how my component has been integrated with Harry's. However, you can easily change this by commenting and uncommenting the correct lines in the run() method which is part of the Game class (view below or on the Final Entry of my documentation).
-
-Live demonstration run() method:
-    i = 0
-    if self.running:
-        self.playing = True
-        while self.playing:
-            self.clock.tick(FPS)
-            self.events()
-            self.update()
-            self.paint()
-            if self.white.turn:
-                # self.white.move()
-                self.white.move_from_img(i)
-                time.sleep(3)
-                i += 1
-                i %= 3
-            elif self.ai.turn:
-                self.ai.move()
-
-AI run() method
-    # i = 0
-    if self.running:
-        self.playing = True
-        while self.playing:
-            self.clock.tick(FPS)
-            self.events()
-            self.update()
-            self.paint()
-            if self.white.turn:
-                self.white.move()
-                #self.white.move_from_img(i)
-                #time.sleep(3)
-                #i += 1
-                #i %= 3
-            elif self.ai.turn:
-                self.ai.move()
-
-A drag and drop system is used to move the pieces (when playing against the AI). 
+You can play against the chess AI or see a live demonstrate in which the AI takes images as inputs by running main.py. To pick which mode you wish to play click on the labelled button that corresponds to your preference on the main menu screen. A drag and drop system is used to move the pieces (when playing against the AI). 
  
 If you are interested in seeing how the vision code works by itself, please follow the instructions in the vision.py file. This will calibrate the colour bounds from a starting board then generate a Python board matrix from another image. 
  
